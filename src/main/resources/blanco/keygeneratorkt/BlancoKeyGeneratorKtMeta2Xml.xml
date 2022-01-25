@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- blancoCalcParser define file for blancoKeyGenerator -->
+<blanco version="0.1.0">
+  <target name="blancoCalcParser">
+    <blancocalcparser name="keygenerator">
+      <propertyblock name="blancokeygenerator-common" waitY="1">
+        <startstring>キー定義・共通</startstring>
+        <propertykey name="name" waitX="2">
+          <value>クラス名</value>
+        </propertykey>
+        <!--
+        <propertykey name="namespace" waitX="2">
+          <value>名前空間</value>
+        </propertykey>
+        -->
+        <propertykey name="package" waitX="2">
+          <value>パッケージ</value>
+        </propertykey>
+        <propertykey name="generic" waitX="2">
+          <value>総称型</value>
+        </propertykey>
+        <propertykey name="annotation" waitX="2">
+          <value>アノテーション</value>
+        </propertykey>
+        <propertykey name="annotationKt" waitX="2">
+          <value>アノテーション(Kt)</value>
+        </propertykey>
+        <propertykey name="description" waitX="2">
+          <value>説明</value>
+        </propertykey>
+        <propertykey name="fileDescription" waitX="2">
+          <value>ファイル説明</value>
+        </propertykey>
+        <propertykey name="access" waitX="2">
+          <value>アクセス</value>
+        </propertykey>
+        <propertykey name="final" waitX="2">
+          <value>ファイナル</value>
+        </propertykey>
+        <propertykey name="abstract" waitX="2">
+          <value>抽象クラス</value>
+        </propertykey>
+        <propertykey name="data" waitX="2">
+          <value>dataクラス</value>
+        </propertykey>
+        <propertykey name="generateToString" waitX="2">
+          <value>toStringメソッドの生成</value>
+        </propertykey>
+        <propertykey name="adjustFieldName" waitX="2">
+          <value>フィールド名の変形</value>
+        </propertykey>
+
+        <valuemapping>
+          <result>true</result>
+          <source>○</source>
+        </valuemapping>
+      </propertyblock>
+
+      <propertyblock name="blancokeygenerator-extends" waitY="1">
+        <startstring>キー定義・継承</startstring>
+        <propertykey name="name" waitX="2">
+          <value>クラス名</value>
+        </propertykey>
+        <propertykey name="package" waitX="2">
+          <value>パッケージ</value>
+        </propertykey>
+        <propertykey name="generic" waitX="2">
+          <value>総称型</value>
+        </propertykey>
+      </propertyblock>
+
+      <tableblock name="blancokeygenerator-implements" waitY="2" titleheight="2" rowname="import">
+        <startstring>キー定義・実装</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>インタフェース名</value>
+        </tablecolumn>
+
+      </tableblock>
+
+      <tableblock name="blancokeygenerator-import" waitY="2" titleheight="2" rowname="import">
+      <startstring>キー定義・インポート</startstring>
+
+      <tablecolumn name="no">
+        <value>No.</value>
+      </tablecolumn>
+      <tablecolumn name="name">
+        <value>インポートクラス名</value>
+      </tablecolumn>
+
+      </tableblock>
+
+      <tableblock name="blancovalueobjectkt-delegate" waitY="2" titleheight="3" rowname="delegate">
+        <startstring>キー定義・委譲</startstring>
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>フィールド名</value>
+        </tablecolumn>
+        <tablecolumn name="type">
+          <value>型</value>
+        </tablecolumn>
+        <tablecolumn name="generic">
+          <value>総称型</value>
+        </tablecolumn>
+        <tablecolumn name="description">
+          <value>説明</value>
+        </tablecolumn>
+      </tableblock>
+
+      <tableblock name="blancokeygenerator-itemlist" waitY="2" titleheight="3" rowname="field">
+        <startstring>キー定義・項目一覧</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>フィールド名</value>
+        </tablecolumn>
+        <tablecolumn name="type">
+          <value>型</value>
+        </tablecolumn>
+        <tablecolumn name="generic">
+          <value>総称型</value>
+        </tablecolumn>
+        <tablecolumn name="annotation">
+          <value>アノテーション</value>
+        </tablecolumn>
+        <tablecolumn name="default">
+          <value>デフォルト</value>
+        </tablecolumn>
+        <tablecolumn name="typeKt">
+          <value>型(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="genericKt">
+          <value>総称型(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="annotationKt">
+          <value>アノテーション(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="defaultKt">
+          <value>デフォルト(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="abstract">
+          <value>abstract</value>
+        </tablecolumn>
+        <tablecolumn name="nullable">
+          <value>Nullable</value>
+        </tablecolumn>
+        <tablecolumn name="nullableKt">
+          <value>Nullable(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="required">
+          <value>必須</value>
+        </tablecolumn>
+        <tablecolumn name="requiredKt">
+          <value>必須(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="fixedValue">
+          <value>変更不可変数</value>
+        </tablecolumn>
+        <tablecolumn name="fixedValueKt">
+          <value>変更不可変数(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="constructorArg">
+          <value>コンストラクタ引数</value>
+        </tablecolumn>
+        <tablecolumn name="open">
+          <value>オープン</value>
+        </tablecolumn>
+        <tablecolumn name="description">
+          <value>説明</value>
+        </tablecolumn>
+
+        <valuemapping>
+          <result>true</result>
+          <source>○</source>
+        </valuemapping>
+
+        <valuemapping>
+          <result>not</result>
+          <source>×</source>
+        </valuemapping>
+
+      </tableblock>
+
+      <tableblock name="blancokeygenerator-keylist" waitY="2" titleheight="3" rowname="field">
+        <startstring>キー定義・キー一覧</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>フィールド名</value>
+        </tablecolumn>
+        <tablecolumn name="type">
+          <value>型</value>
+        </tablecolumn>
+        <tablecolumn name="generic">
+          <value>総称型</value>
+        </tablecolumn>
+        <tablecolumn name="annotation">
+          <value>アノテーション</value>
+        </tablecolumn>
+        <tablecolumn name="default">
+          <value>デフォルト</value>
+        </tablecolumn>
+        <tablecolumn name="typeKt">
+          <value>型(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="genericKt">
+          <value>総称型(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="annotationKt">
+          <value>アノテーション(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="defaultKt">
+          <value>デフォルト(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="abstract">
+          <value>abstract</value>
+        </tablecolumn>
+        <tablecolumn name="nullable">
+          <value>Nullable</value>
+        </tablecolumn>
+        <tablecolumn name="nullableKt">
+          <value>Nullable(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="required">
+          <value>必須</value>
+        </tablecolumn>
+        <tablecolumn name="requiredKt">
+          <value>必須(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="fixedValue">
+          <value>変更不可変数</value>
+        </tablecolumn>
+        <tablecolumn name="fixedValueKt">
+          <value>変更不可変数(Kt)</value>
+        </tablecolumn>
+        <tablecolumn name="constructorArg">
+          <value>コンストラクタ引数</value>
+        </tablecolumn>
+        <tablecolumn name="open">
+          <value>オープン</value>
+        </tablecolumn>
+        <tablecolumn name="description">
+          <value>説明</value>
+        </tablecolumn>
+
+        <valuemapping>
+          <result>true</result>
+          <source>○</source>
+        </valuemapping>
+
+        <valuemapping>
+          <result>not</result>
+          <source>×</source>
+        </valuemapping>
+
+      </tableblock>
+
+    </blancocalcparser>
+  </target>
+</blanco>

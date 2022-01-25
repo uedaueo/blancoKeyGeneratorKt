@@ -1,0 +1,15 @@
+.svn
+.classpath
+.project
+.idea
+.DS_Store
+*.iml
+/blancoKeyGenerator-*-src.zip
+/bin/
+/tmp/
+/tmpTest/
+/tmpTest2/
+/sample/
+/target/
+/classes
+~$*
