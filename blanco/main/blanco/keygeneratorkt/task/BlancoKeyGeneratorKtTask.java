@@ -8,7 +8,7 @@ import blanco.keygeneratorkt.task.valueobject.BlancoKeyGeneratorKtProcessInput;
 /**
  * Apache Antタスク [BlancoKeyGeneratorKt]のクラス。
  *
- * キー定義書からソースコードを自動生成する BlancoKeyGeneratorKtのAntTaskです。<br>
+ * キーバリューストアテーブル定義書からソースコードを自動生成する BlancoKeyGeneratorKtのAntTaskです。<br>
  * このクラスでは、Apache Antタスクで一般的に必要なチェックなどのコーディングを肩代わりします。
  * 実際の処理は パッケージ[blanco.keygeneratorkt.task]にBlancoKeyGeneratorKtBatchProcessクラスを作成して記述してください。<br>
  * <br>
@@ -24,7 +24,7 @@ import blanco.keygeneratorkt.task.valueobject.BlancoKeyGeneratorKtProcessInput;
  */
 public class BlancoKeyGeneratorKtTask extends Task {
     /**
-     * キー定義書からソースコードを自動生成する BlancoKeyGeneratorKtのAntTaskです。
+     * キーバリューストアテーブル定義書からソースコードを自動生成する BlancoKeyGeneratorKtのAntTaskです。
      */
     protected BlancoKeyGeneratorKtProcessInput fInput = new BlancoKeyGeneratorKtProcessInput();
 

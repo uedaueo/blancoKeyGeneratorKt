@@ -4,7 +4,7 @@
   <target name="blancoCalcParser">
     <blancocalcparser name="keygenerator">
       <propertyblock name="blancokeygenerator-common" waitY="1">
-        <startstring>キー定義・共通</startstring>
+        <startstring>キーバリューストアテーブル定義・共通</startstring>
         <propertykey name="name" waitX="2">
           <value>クラス名</value>
         </propertykey>
@@ -57,7 +57,7 @@
       </propertyblock>
 
       <propertyblock name="blancokeygenerator-extends" waitY="1">
-        <startstring>キー定義・継承</startstring>
+        <startstring>キーバリューストアテーブル定義・継承</startstring>
         <propertykey name="name" waitX="2">
           <value>クラス名</value>
         </propertykey>
@@ -70,7 +70,7 @@
       </propertyblock>
 
       <tableblock name="blancokeygenerator-implements" waitY="2" titleheight="2" rowname="import">
-        <startstring>キー定義・実装</startstring>
+        <startstring>キーバリューストアテーブル定義・実装</startstring>
 
         <tablecolumn name="no">
           <value>No.</value>
@@ -82,7 +82,7 @@
       </tableblock>
 
       <tableblock name="blancokeygenerator-import" waitY="2" titleheight="2" rowname="import">
-      <startstring>キー定義・インポート</startstring>
+      <startstring>キーバリューストアテーブル定義・インポート</startstring>
 
       <tablecolumn name="no">
         <value>No.</value>
@@ -94,7 +94,7 @@
       </tableblock>
 
       <tableblock name="blancovalueobjectkt-delegate" waitY="2" titleheight="3" rowname="delegate">
-        <startstring>キー定義・委譲</startstring>
+        <startstring>キーバリューストアテーブル定義・委譲</startstring>
         <tablecolumn name="no">
           <value>No.</value>
         </tablecolumn>
@@ -113,7 +113,7 @@
       </tableblock>
 
       <tableblock name="blancokeygenerator-itemlist" waitY="2" titleheight="3" rowname="field">
-        <startstring>キー定義・項目一覧</startstring>
+        <startstring>キーバリューストアテーブル定義・項目一覧</startstring>
 
         <tablecolumn name="no">
           <value>No.</value>
@@ -189,7 +189,7 @@
       </tableblock>
 
       <tableblock name="blancokeygenerator-keylist" waitY="2" titleheight="3" rowname="field">
-        <startstring>キー定義・キー一覧</startstring>
+        <startstring>キーバリューストアテーブル定義・キー一覧</startstring>
 
         <tablecolumn name="no">
           <value>No.</value>
