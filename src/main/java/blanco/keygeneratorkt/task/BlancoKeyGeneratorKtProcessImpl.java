@@ -38,7 +38,7 @@ public class BlancoKeyGeneratorKtProcessImpl implements BlancoKeyGeneratorKtProc
         try {
             final File fileMetadir = new File(input.getMetadir());
             if (fileMetadir.exists() == false) {
-                throw new IllegalArgumentException(fMsg.getMbvoja01(input
+                throw new IllegalArgumentException(fMsg.getMbkgja01(input
                         .getMetadir()));
             }
 
@@ -121,23 +121,15 @@ public class BlancoKeyGeneratorKtProcessImpl implements BlancoKeyGeneratorKtProc
          */
             BlancoKeyGeneratorKtUtil.processValueObjects(input);
 
-            for (int index = 0; index < fileMeta2.length; index++) {
-                if (fileMeta2[index].getName().endsWith(".xml") == false) {
-                    continue;
-                }
-
-                final BlancoKeyGeneratorKtXml2KotlinClass xml2KotlinClass = new BlancoKeyGeneratorKtXml2KotlinClass();
-                xml2KotlinClass.setEncoding(input.getEncoding());
-                xml2KotlinClass.setVerbose(input.getVerbose());
-                xml2KotlinClass.setTargetStyleAdvanced(isTargetStyleAdvanced);
-                xml2KotlinClass.setXmlRootElement(input.getXmlrootelement());
-                xml2KotlinClass.setSheetLang(new BlancoCgSupportedLang().convertToInt(input.getSheetType()));
-                xml2KotlinClass.setPackageSuffix(input.getPackageSuffix());
-                xml2KotlinClass.setOverridePackage(input.getOverridePackage());
-                xml2KotlinClass.process(fileMeta2[index], new File(strTarget));
-
-                // The auto-generation of unit test codes has been removed in 0.9.1 and later.
-            }
+            final BlancoKeyGeneratorKtXml2KotlinClass xml2KotlinClass = new BlancoKeyGeneratorKtXml2KotlinClass();
+            xml2KotlinClass.setEncoding(input.getEncoding());
+            xml2KotlinClass.setVerbose(input.getVerbose());
+            xml2KotlinClass.setTargetStyleAdvanced(isTargetStyleAdvanced);
+            xml2KotlinClass.setXmlRootElement(input.getXmlrootelement());
+            xml2KotlinClass.setSheetLang(new BlancoCgSupportedLang().convertToInt(input.getSheetType()));
+            xml2KotlinClass.setPackageSuffix(input.getPackageSuffix());
+            xml2KotlinClass.setOverridePackage(input.getOverridePackage());
+            xml2KotlinClass.process(fileMeta2, new File(strTarget));
 
             return BlancoKeyGeneratorKtBatchProcess.END_SUCCESS;
         } catch (TransformerException e) {

@@ -7,7 +7,7 @@ import blanco.cg.valueobject.BlancoCgField;
 /**
  * キージェネレータのクラスをあらわすバリューオブジェクトクラス。このクラスの設定情報をもとにクラスが自動生成されます。
  */
-public class BlancoKeyGeneratorKtClassStructure {
+public class BlancoKeyGeneratorKtTableStructure {
     /**
      * フィールド名を指定します。必須項目です。
      *
@@ -72,9 +72,9 @@ public class BlancoKeyGeneratorKtClassStructure {
      * dataクラスかどうか。
      *
      * フィールド: [data]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      */
-    private Boolean fData = true;
+    private Boolean fData = false;
 
     /**
      * クラスが拡張可能かどうか。kotlin では通常は true。
@@ -96,9 +96,9 @@ public class BlancoKeyGeneratorKtClassStructure {
      * toStringメソッドを生成するかどうか。
      *
      * フィールド: [generateToString]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      */
-    private Boolean fGenerateToString = true;
+    private Boolean fGenerateToString = false;
 
     /**
      * フィールド名の名前変形をおこなうかどうか。
@@ -112,9 +112,9 @@ public class BlancoKeyGeneratorKtClassStructure {
      * デフォルト値の変形をおこなうかどうか。※なるべく変形を利用しないことを推奨したい。※プログラムAPIとして生成する際には、このフィールドを明示的に設定してください。
      *
      * フィールド: [adjustDefaultValue]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      */
-    private Boolean fAdjustDefaultValue = true;
+    private Boolean fAdjustDefaultValue = false;
 
     /**
      * 継承するクラスを指定します。
@@ -139,6 +139,14 @@ public class BlancoKeyGeneratorKtClassStructure {
      * デフォルト: [new java.util.ArrayList&lt;blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure&gt;()]。
      */
     private List<BlancoKeyGeneratorKtFieldStructure> fFieldList = new java.util.ArrayList<blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure>();
+
+    /**
+     * キーを記憶するリストを指定します。
+     *
+     * フィールド: [keyList]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyStructure&gt;()]。
+     */
+    private List<BlancoKeyGeneratorKtKeyStructure> fKeyList = new java.util.ArrayList<blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyStructure>();
 
     /**
      * 委譲を記憶するリストを指定します。
@@ -176,6 +184,14 @@ public class BlancoKeyGeneratorKtClassStructure {
      * フィールド: [overridePackage]。
      */
     private String fOverridePackage;
+
+    /**
+     * このテーブルが配置されるバケットの情報を格納します。
+     *
+     * フィールド: [bucket]。
+     * デフォルト: [new blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure()]。
+     */
+    private BlancoKeyGeneratorKtBucketStructure fBucket = new blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure();
 
     /**
      * フィールド [name] の値を設定します。
@@ -372,7 +388,7 @@ public class BlancoKeyGeneratorKtClassStructure {
      * フィールド [data] の値を取得します。
      *
      * フィールドの説明: [dataクラスかどうか。]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      *
      * @return フィールド[data]から取得した値。
      */
@@ -441,7 +457,7 @@ public class BlancoKeyGeneratorKtClassStructure {
      * フィールド [generateToString] の値を取得します。
      *
      * フィールドの説明: [toStringメソッドを生成するかどうか。]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      *
      * @return フィールド[generateToString]から取得した値。
      */
@@ -487,7 +503,7 @@ public class BlancoKeyGeneratorKtClassStructure {
      * フィールド [adjustDefaultValue] の値を取得します。
      *
      * フィールドの説明: [デフォルト値の変形をおこなうかどうか。※なるべく変形を利用しないことを推奨したい。※プログラムAPIとして生成する際には、このフィールドを明示的に設定してください。]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      *
      * @return フィールド[adjustDefaultValue]から取得した値。
      */
@@ -562,6 +578,29 @@ public class BlancoKeyGeneratorKtClassStructure {
      */
     public List<BlancoKeyGeneratorKtFieldStructure> getFieldList() {
         return fFieldList;
+    }
+
+    /**
+     * フィールド [keyList] の値を設定します。
+     *
+     * フィールドの説明: [キーを記憶するリストを指定します。]。
+     *
+     * @param argKeyList フィールド[keyList]に設定する値。
+     */
+    public void setKeyList(final List<BlancoKeyGeneratorKtKeyStructure> argKeyList) {
+        fKeyList = argKeyList;
+    }
+
+    /**
+     * フィールド [keyList] の値を取得します。
+     *
+     * フィールドの説明: [キーを記憶するリストを指定します。]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyStructure&gt;()]。
+     *
+     * @return フィールド[keyList]から取得した値。
+     */
+    public List<BlancoKeyGeneratorKtKeyStructure> getKeyList() {
+        return fKeyList;
     }
 
     /**
@@ -677,6 +716,29 @@ public class BlancoKeyGeneratorKtClassStructure {
     }
 
     /**
+     * フィールド [bucket] の値を設定します。
+     *
+     * フィールドの説明: [このテーブルが配置されるバケットの情報を格納します。]。
+     *
+     * @param argBucket フィールド[bucket]に設定する値。
+     */
+    public void setBucket(final BlancoKeyGeneratorKtBucketStructure argBucket) {
+        fBucket = argBucket;
+    }
+
+    /**
+     * フィールド [bucket] の値を取得します。
+     *
+     * フィールドの説明: [このテーブルが配置されるバケットの情報を格納します。]。
+     * デフォルト: [new blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure()]。
+     *
+     * @return フィールド[bucket]から取得した値。
+     */
+    public BlancoKeyGeneratorKtBucketStructure getBucket() {
+        return fBucket;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -690,7 +752,7 @@ public class BlancoKeyGeneratorKtClassStructure {
     @Override
     public String toString() {
         final StringBuffer buf = new StringBuffer();
-        buf.append("blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtClassStructure[");
+        buf.append("blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure[");
         buf.append("name=" + fName);
         buf.append(",package=" + fPackage);
         buf.append(",generic=" + fGeneric);
@@ -708,11 +770,13 @@ public class BlancoKeyGeneratorKtClassStructure {
         buf.append(",extends=" + fExtends);
         buf.append(",implementsList=" + fImplementsList);
         buf.append(",fieldList=" + fFieldList);
+        buf.append(",keyList=" + fKeyList);
         buf.append(",delegateList=" + fDelegateList);
         buf.append(",fileDescription=" + fFileDescription);
         buf.append(",constructorArgList=" + fConstructorArgList);
         buf.append(",packageSuffix=" + fPackageSuffix);
         buf.append(",overridePackage=" + fOverridePackage);
+        buf.append(",bucket=" + fBucket);
         buf.append("]");
         return buf.toString();
     }
@@ -728,9 +792,9 @@ public class BlancoKeyGeneratorKtClassStructure {
      *
      * @param target target value object.
      */
-    public void copyTo(final BlancoKeyGeneratorKtClassStructure target) {
+    public void copyTo(final BlancoKeyGeneratorKtTableStructure target) {
         if (target == null) {
-            throw new IllegalArgumentException("Bug: BlancoKeyGeneratorKtClassStructure#copyTo(target): argument 'target' is null");
+            throw new IllegalArgumentException("Bug: BlancoKeyGeneratorKtTableStructure#copyTo(target): argument 'target' is null");
         }
 
         // No needs to copy parent class.
@@ -786,6 +850,9 @@ public class BlancoKeyGeneratorKtClassStructure {
         // Name: fFieldList
         // Type: java.util.List
         // フィールド[fFieldList]はサポート外の型[java.util.Listblanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure]です。
+        // Name: fKeyList
+        // Type: java.util.List
+        // フィールド[fKeyList]はサポート外の型[java.util.Listblanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyStructure]です。
         // Name: fDelegateList
         // Type: java.util.List
         // フィールド[fDelegateList]はサポート外の型[java.util.Listblanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtDelegateStructure]です。
@@ -801,5 +868,8 @@ public class BlancoKeyGeneratorKtClassStructure {
         // Name: fOverridePackage
         // Type: java.lang.String
         target.fOverridePackage = this.fOverridePackage;
+        // Name: fBucket
+        // Type: blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure
+        // フィールド[fBucket]はサポート外の型[blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure]です。
     }
 }

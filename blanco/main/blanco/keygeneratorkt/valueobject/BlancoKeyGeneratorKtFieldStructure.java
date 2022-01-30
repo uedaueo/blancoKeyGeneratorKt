@@ -79,20 +79,20 @@ public class BlancoKeyGeneratorKtFieldStructure {
     private String fDefaultKt;
 
     /**
-     * abstract変数かどうか
+     * キー項目かどうか
      *
-     * フィールド: [abstract]。
+     * フィールド: [keyitem]。
      * デフォルト: [false]。
      */
-    private Boolean fAbstract = false;
+    private Boolean fKeyitem = false;
 
     /**
      * nullable変数かどうか
      *
-     * フィールド: [nullable]。
-     * デフォルト: [false]。
+     * フィールド: [notNullable]。
+     * デフォルト: [true]。
      */
-    private Boolean fNullable = false;
+    private Boolean fNotNullable = true;
 
     /**
      * 必須変数かどうか。必須の場合は @NotNull アノテーションが付与されます。
@@ -405,49 +405,49 @@ public class BlancoKeyGeneratorKtFieldStructure {
     }
 
     /**
-     * フィールド [abstract] の値を設定します。
+     * フィールド [keyitem] の値を設定します。
      *
-     * フィールドの説明: [abstract変数かどうか]。
+     * フィールドの説明: [キー項目かどうか]。
      *
-     * @param argAbstract フィールド[abstract]に設定する値。
+     * @param argKeyitem フィールド[keyitem]に設定する値。
      */
-    public void setAbstract(final Boolean argAbstract) {
-        fAbstract = argAbstract;
+    public void setKeyitem(final Boolean argKeyitem) {
+        fKeyitem = argKeyitem;
     }
 
     /**
-     * フィールド [abstract] の値を取得します。
+     * フィールド [keyitem] の値を取得します。
      *
-     * フィールドの説明: [abstract変数かどうか]。
+     * フィールドの説明: [キー項目かどうか]。
      * デフォルト: [false]。
      *
-     * @return フィールド[abstract]から取得した値。
+     * @return フィールド[keyitem]から取得した値。
      */
-    public Boolean getAbstract() {
-        return fAbstract;
+    public Boolean getKeyitem() {
+        return fKeyitem;
     }
 
     /**
-     * フィールド [nullable] の値を設定します。
+     * フィールド [notNullable] の値を設定します。
      *
      * フィールドの説明: [nullable変数かどうか]。
      *
-     * @param argNullable フィールド[nullable]に設定する値。
+     * @param argNotNullable フィールド[notNullable]に設定する値。
      */
-    public void setNullable(final Boolean argNullable) {
-        fNullable = argNullable;
+    public void setNotNullable(final Boolean argNotNullable) {
+        fNotNullable = argNotNullable;
     }
 
     /**
-     * フィールド [nullable] の値を取得します。
+     * フィールド [notNullable] の値を取得します。
      *
      * フィールドの説明: [nullable変数かどうか]。
-     * デフォルト: [false]。
+     * デフォルト: [true]。
      *
-     * @return フィールド[nullable]から取得した値。
+     * @return フィールド[notNullable]から取得した値。
      */
-    public Boolean getNullable() {
-        return fNullable;
+    public Boolean getNotNullable() {
+        return fNotNullable;
     }
 
     /**
@@ -743,8 +743,8 @@ public class BlancoKeyGeneratorKtFieldStructure {
         buf.append(",genericKt=" + fGenericKt);
         buf.append(",annotationListKt=" + fAnnotationListKt);
         buf.append(",defaultKt=" + fDefaultKt);
-        buf.append(",abstract=" + fAbstract);
-        buf.append(",nullable=" + fNullable);
+        buf.append(",keyitem=" + fKeyitem);
+        buf.append(",notNullable=" + fNotNullable);
         buf.append(",required=" + fRequired);
         buf.append(",value=" + fValue);
         buf.append(",constArg=" + fConstArg);
@@ -809,12 +809,12 @@ public class BlancoKeyGeneratorKtFieldStructure {
         // Name: fDefaultKt
         // Type: java.lang.String
         target.fDefaultKt = this.fDefaultKt;
-        // Name: fAbstract
+        // Name: fKeyitem
         // Type: java.lang.Boolean
-        target.fAbstract = this.fAbstract;
-        // Name: fNullable
+        target.fKeyitem = this.fKeyitem;
+        // Name: fNotNullable
         // Type: java.lang.Boolean
-        target.fNullable = this.fNullable;
+        target.fNotNullable = this.fNotNullable;
         // Name: fRequired
         // Type: java.lang.Boolean
         target.fRequired = this.fRequired;

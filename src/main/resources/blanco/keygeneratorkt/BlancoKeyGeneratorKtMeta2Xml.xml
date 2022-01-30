@@ -3,8 +3,53 @@
 <blanco version="0.1.0">
   <target name="blancoCalcParser">
     <blancocalcparser name="keygenerator">
+      <propertyblock name="blancokeygenerator-bucketcommon" waitY="1">
+        <startstring>キーバリューストアバケット定義・共通</startstring>
+        <propertykey name="name" waitX="2">
+          <value>バケット定義書ID</value>
+        </propertykey>
+        <propertykey name="package" waitX="2">
+          <value>パッケージ</value>
+        </propertykey>
+        <propertykey name="description" waitX="2">
+          <value>説明</value>
+        </propertykey>
+        <propertykey name="fileDescription" waitX="2">
+          <value>ファイル説明</value>
+        </propertykey>
+      </propertyblock>
+
+
+      <tableblock name="blancokeygenerator-bucketlist" waitY="2" titleheight="3" rowname="bucket">
+      <startstring>キーバリューストアバケット定義・一覧</startstring>
+        <tablecolumn name="no">
+          <value>No.</value>
+          <tablecolumn name="name">
+            <value>バケットID</value>
+          </tablecolumn>
+        </tablecolumn>
+        <tablecolumn name="kvsType">
+          <value>KVSタイプ</value>
+        </tablecolumn>
+        <tablecolumn name="tableIdLength">
+          <value>table識別子桁数</value>
+        </tablecolumn>
+        <tablecolumn name="version">
+          <value>バージョン</value>
+        </tablecolumn>
+        <tablecolumn name="description">
+          <value>説明</value>
+        </tablecolumn>
+      </tableblock>
+
       <propertyblock name="blancokeygenerator-common" waitY="1">
         <startstring>キーバリューストアテーブル定義・共通</startstring>
+        <propertykey name="bucket" waitX="2">
+          <value>バケットID</value>
+        </propertykey>
+        <propertykey name="no" waitX="2">
+          <value>テーブル番号</value>
+        </propertykey>
         <propertykey name="name" waitX="2">
           <value>クラス名</value>
         </propertykey>
@@ -30,12 +75,6 @@
         </propertykey>
         <propertykey name="fileDescription" waitX="2">
           <value>ファイル説明</value>
-        </propertykey>
-        <propertykey name="kvsType" waitX="2">
-          <value>KVSタイプ</value>
-        </propertykey>
-        <propertykey name="tableIdLength" waitX="2">
-          <value>table識別子桁数</value>
         </propertykey>
         <propertykey name="keyIdLength" waitX="2">
           <value>キー識別子桁数</value>
@@ -133,6 +172,9 @@
         <tablecolumn name="default">
           <value>デフォルト</value>
         </tablecolumn>
+        <tablecolumn name="defaultKt">
+          <value>デフォルト(Kt)</value>
+        </tablecolumn>
         <tablecolumn name="keyitem">
           <value>キー項目</value>
         </tablecolumn>
@@ -161,7 +203,7 @@
 
       </tableblock>
 
-      <tableblock name="blancokeygenerator-keylist" waitY="2" titleheight="3" rowname="field">
+      <tableblock name="blancokeygenerator-keylist" waitY="2" titleheight="3" rowname="key">
         <startstring>キーバリューストアテーブル定義・キー一覧</startstring>
 
         <tablecolumn name="no">
@@ -170,11 +212,11 @@
         <tablecolumn name="name">
           <value>キー名</value>
         </tablecolumn>
-        <tablecolumn name="keyItems">
+        <tablecolumn name="keyPart">
           <value>検索部</value>
         </tablecolumn>
-        <tablecolumn name="valueItems">
-          <value>総称型</value>
+        <tablecolumn name="valuePart">
+          <value>非検索部</value>
         </tablecolumn>
         <tablecolumn name="description">
           <value>説明</value>

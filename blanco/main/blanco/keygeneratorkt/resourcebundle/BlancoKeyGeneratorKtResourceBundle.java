@@ -94,15 +94,55 @@ public class BlancoKeyGeneratorKtResourceBundle {
     }
 
     /**
+     * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_BUCKETCOMMON]
+     *
+     * [blancokeygenerator-bucketcommon] (ja)<br>
+     *
+     * @return key[META2XML.ELEMENT_BUCKETCOMMON]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMeta2xmlElementBucketcommon() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "blancokeygenerator-bucketcommon";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("META2XML.ELEMENT_BUCKETCOMMON");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_BUCKETLIST]
+     *
+     * [blancokeygenerator-bucketlist] (ja)<br>
+     *
+     * @return key[META2XML.ELEMENT_BUCKETLIST]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMeta2xmlElementBucketlist() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "blancokeygenerator-bucketlist";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("META2XML.ELEMENT_BUCKETLIST");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
      * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_COMMON]
      *
-     * [blancokeygeneratorkt-common] (ja)<br>
+     * [blancokeygenerator-common] (ja)<br>
      *
      * @return key[META2XML.ELEMENT_COMMON]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
      */
     public String getMeta2xmlElementCommon() {
         // 初期値として定義書の値を利用します。
-        String strFormat = "blancokeygeneratorkt-common";
+        String strFormat = "blancokeygenerator-common";
         try {
             if (fResourceBundle != null) {
                 strFormat = fResourceBundle.getString("META2XML.ELEMENT_COMMON");
@@ -116,13 +156,13 @@ public class BlancoKeyGeneratorKtResourceBundle {
     /**
      * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_LIST]
      *
-     * [blancokeygeneratorkt-list] (ja)<br>
+     * [blancokeygenerator-list] (ja)<br>
      *
      * @return key[META2XML.ELEMENT_LIST]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
      */
     public String getMeta2xmlElementList() {
         // 初期値として定義書の値を利用します。
-        String strFormat = "blancokeygeneratorkt-list";
+        String strFormat = "blancokeygenerator-list";
         try {
             if (fResourceBundle != null) {
                 strFormat = fResourceBundle.getString("META2XML.ELEMENT_LIST");
@@ -136,13 +176,13 @@ public class BlancoKeyGeneratorKtResourceBundle {
     /**
      * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_EXTENDS]
      *
-     * [blancokeygeneratorkt-extends] (ja)<br>
+     * [blancokeygenerator-extends] (ja)<br>
      *
      * @return key[META2XML.ELEMENT_EXTENDS]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
      */
     public String getMeta2xmlElementExtends() {
         // 初期値として定義書の値を利用します。
-        String strFormat = "blancokeygeneratorkt-extends";
+        String strFormat = "blancokeygenerator-extends";
         try {
             if (fResourceBundle != null) {
                 strFormat = fResourceBundle.getString("META2XML.ELEMENT_EXTENDS");
@@ -156,13 +196,13 @@ public class BlancoKeyGeneratorKtResourceBundle {
     /**
      * bundle[BlancoKeyGeneratorKt], key[META2XML.ELEMENT_IMPLEMENTS]
      *
-     * [blancokeygeneratorkt-implements] (ja)<br>
+     * [blancokeygenerator-implements] (ja)<br>
      *
      * @return key[META2XML.ELEMENT_IMPLEMENTS]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
      */
     public String getMeta2xmlElementImplements() {
         // 初期値として定義書の値を利用します。
-        String strFormat = "blancokeygeneratorkt-implements";
+        String strFormat = "blancokeygenerator-implements";
         try {
             if (fResourceBundle != null) {
                 strFormat = fResourceBundle.getString("META2XML.ELEMENT_IMPLEMENTS");

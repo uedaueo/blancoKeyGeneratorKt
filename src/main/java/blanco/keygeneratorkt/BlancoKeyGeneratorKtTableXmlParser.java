@@ -13,10 +13,8 @@ import blanco.cg.BlancoCgSupportedLang;
 import blanco.commons.util.BlancoNameUtil;
 import blanco.commons.util.BlancoStringUtil;
 import blanco.keygeneratorkt.message.BlancoKeyGeneratorKtMessage;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtClassStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtDelegateStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtExtendsStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure;
+import blanco.keygeneratorkt.resourcebundle.BlancoKeyGeneratorKtResourceBundle;
+import blanco.keygeneratorkt.valueobject.*;
 import blanco.xml.bind.BlancoXmlBindingUtil;
 import blanco.xml.bind.BlancoXmlUnmarshaller;
 import blanco.xml.bind.valueobject.BlancoXmlAttribute;
@@ -32,12 +30,15 @@ import java.util.Map;
  * A class that parses (reads and writes) the intermediate XML file format of a blancoValueObject.
  *
  * @author IGA Tosiki
+ * @author tueda
  */
-public class BlancoKeyGeneratorKtXmlParser {
+public class BlancoKeyGeneratorKtTableXmlParser {
     /**
      * A message.
      */
     private final BlancoKeyGeneratorKtMessage fMsg = new BlancoKeyGeneratorKtMessage();
+
+    private final BlancoKeyGeneratorKtResourceBundle fBundle = new BlancoKeyGeneratorKtResourceBundle();
 
     private boolean fVerbose = false;
     public void setVerbose(boolean argVerbose) {
@@ -72,8 +73,10 @@ public class BlancoKeyGeneratorKtXmlParser {
      *            An intermediate XML file.
      * @return An array of information obtained as a result of parsing.
      */
-    public BlancoKeyGeneratorKtClassStructure[] parse(
-            final File argMetaXmlSourceFile) {
+    public BlancoKeyGeneratorKtTableStructure[] parse(
+            final File argMetaXmlSourceFile,
+            final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
+    ) {
         final BlancoXmlDocument documentMeta = new BlancoXmlUnmarshaller()
                 .unmarshal(argMetaXmlSourceFile);
         if (documentMeta == null) {
@@ -82,7 +85,7 @@ public class BlancoKeyGeneratorKtXmlParser {
 
         System.out.println("[blancoKeyGeneratorKt: Processes " + argMetaXmlSourceFile.getName() + ".]");
 
-        return parse(documentMeta);
+        return parse(documentMeta, argBucketListStructure);
 
     }
 
@@ -93,9 +96,11 @@ public class BlancoKeyGeneratorKtXmlParser {
      *            XML document of an intermediate XML file.
      * @return An array of value object information obtained as a result of parsing.
      */
-    public BlancoKeyGeneratorKtClassStructure[] parse(
-            final BlancoXmlDocument argXmlDocument) {
-        final List<BlancoKeyGeneratorKtClassStructure> listStructure = new ArrayList<BlancoKeyGeneratorKtClassStructure>();
+    public BlancoKeyGeneratorKtTableStructure[] parse(
+            final BlancoXmlDocument argXmlDocument,
+            final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
+    ) {
+        final List<BlancoKeyGeneratorKtTableStructure> listStructure = new ArrayList<BlancoKeyGeneratorKtTableStructure>();
 
         // Gets the root element.
         final BlancoXmlElement elementRoot = BlancoXmlBindingUtil
@@ -114,35 +119,27 @@ public class BlancoKeyGeneratorKtXmlParser {
             final BlancoXmlElement elementSheet = listSheet.get(index);
 
             /*
-             * Supports sheets written for languages other than Java.
+             * BlancoKeyGenerator is just support PHP style sheet.
              */
-            List<BlancoXmlElement> listCommon = null;
+            List<BlancoXmlElement> listCommon = BlancoXmlBindingUtil
+                    .getElementsByTagName(elementSheet,
+                            fBundle.getMeta2xmlElementCommon());
             int sheetLang = BlancoCgSupportedLang.PHP;
-            for (String common : BlancoKeyGeneratorKtUtil.mapCommons.keySet()) {
-                listCommon = BlancoXmlBindingUtil
-                        .getElementsByTagName(elementSheet,
-                                common);
-                if (listCommon.size() != 0) {
-                    BlancoXmlAttribute attr = new BlancoXmlAttribute();
-                    attr.setType("CDATA");
-                    attr.setQName("style");
-                    attr.setLocalName("style");
+            if (listCommon.size() != 0) {
+                BlancoXmlAttribute attr = new BlancoXmlAttribute();
+                attr.setType("CDATA");
+                attr.setQName("style");
+                attr.setLocalName("style");
 
-                    sheetLang = BlancoKeyGeneratorKtUtil.mapCommons.get(common);
-                    attr.setValue(new BlancoCgSupportedLang().convertToString(sheetLang));
+                attr.setValue(new BlancoCgSupportedLang().convertToString(sheetLang));
 
-                    elementSheet.getAtts().add(attr);
+                elementSheet.getAtts().add(attr);
 
-                    /* tueda DEBUG */
+                /* tueda DEBUG */
 //                    if (this.isVerbose()) {
 //                        System.out.println("/* tueda */ style = " + BlancoXmlBindingUtil.getAttribute(elementSheet, "style"));
 //                    }
-
-                    break;
-                }
-            }
-
-            if (listCommon == null || listCommon.size() == 0) {
+            } else {
                 // Skips if there is no common.
                 continue;
             }
@@ -155,7 +152,7 @@ public class BlancoKeyGeneratorKtXmlParser {
                 continue;
             }
 
-            BlancoKeyGeneratorKtClassStructure objClassStructure = null;
+            BlancoKeyGeneratorKtTableStructure objClassStructure = null;
             switch (sheetLang) {
                 case BlancoCgSupportedLang.PHP:
                     objClassStructure = parseElementSheetPhp(elementSheet, BlancoKeyGeneratorKtUtil.packageMap);
@@ -168,7 +165,7 @@ public class BlancoKeyGeneratorKtXmlParser {
             }
         }
 
-        final BlancoKeyGeneratorKtClassStructure[] result = new BlancoKeyGeneratorKtClassStructure[listStructure
+        final BlancoKeyGeneratorKtTableStructure[] result = new BlancoKeyGeneratorKtTableStructure[listStructure
                 .size()];
         listStructure.toArray(result);
         return result;
@@ -181,9 +178,9 @@ public class BlancoKeyGeneratorKtXmlParser {
      *            "sheet" XML element in the intermediate XML file.
      * @return Value object information obtained as a result of parsing. Null is returned if "name" is not found.
      */
-    public BlancoKeyGeneratorKtClassStructure parseElementSheet(
+    public BlancoKeyGeneratorKtTableStructure parseElementSheet(
             final BlancoXmlElement argElementSheet) {
-        final BlancoKeyGeneratorKtClassStructure objClassStructure = new BlancoKeyGeneratorKtClassStructure();
+        final BlancoKeyGeneratorKtTableStructure objClassStructure = new BlancoKeyGeneratorKtTableStructure();
         final List<BlancoXmlElement> listCommon = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet,
                         "blancokeygenerator-common");
@@ -239,7 +236,7 @@ public class BlancoKeyGeneratorKtXmlParser {
 
         if (objClassStructure.getPackage() == null) {
             throw new IllegalArgumentException(fMsg
-                    .getMbvoji01(objClassStructure.getName()));
+                    .getMbkgji01(objClassStructure.getName()));
         }
 
         final List<BlancoXmlElement> extendsList = BlancoXmlBindingUtil
@@ -328,7 +325,7 @@ public class BlancoKeyGeneratorKtXmlParser {
 
                 if (fieldStructure.getType() == null
                         || fieldStructure.getType().trim().length() == 0) {
-                    throw new IllegalArgumentException(fMsg.getMbvoji02(
+                    throw new IllegalArgumentException(fMsg.getMbkgji02(
                             objClassStructure.getName(), fieldStructure
                                     .getName()));
                 }
@@ -347,10 +344,10 @@ public class BlancoKeyGeneratorKtXmlParser {
      *            "sheet" XML element in the intermediate XML file.
      * @return Value object information obtained as a result of parsing. Null is returned if "name" is not found.
      */
-    public BlancoKeyGeneratorKtClassStructure parseElementSheetPhp(
+    public BlancoKeyGeneratorKtTableStructure parseElementSheetPhp(
             final BlancoXmlElement argElementSheet,
             final Map<String, String> argClassList) {
-        final BlancoKeyGeneratorKtClassStructure objClassStructure = new BlancoKeyGeneratorKtClassStructure();
+        final BlancoKeyGeneratorKtTableStructure objClassStructure = new BlancoKeyGeneratorKtTableStructure();
         final List<BlancoXmlElement> listCommon = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet,
                         "blancokeygenerator-common");
@@ -503,7 +500,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseCommonPhp(
             final BlancoXmlElement argElementCommon,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure
+            final BlancoKeyGeneratorKtTableStructure argClassStructure
     ) {
         argClassStructure.setName(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "name"));
@@ -567,7 +564,7 @@ public class BlancoKeyGeneratorKtXmlParser {
 
         if (argClassStructure.getPackage() == null) {
             throw new IllegalArgumentException(fMsg
-                    .getMbvoji01(argClassStructure.getName()));
+                    .getMbkgji01(argClassStructure.getName()));
         }
     }
 
@@ -581,7 +578,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseExtendsPhp(
             final BlancoXmlElement argElementExtendsRoot,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final Map<String, String> argClassList
     ) {
         String className = BlancoXmlBindingUtil.getTextContent(argElementExtendsRoot, "name");
@@ -623,7 +620,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseInterfacePhp(
             final BlancoXmlElement argElementInterfaceRoot,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final Map<String, String> argClassList) {
         final List<BlancoXmlElement> listInterfaceChildNodes = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementInterfaceRoot, "import");
@@ -661,7 +658,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseImportListPhp(
             final BlancoXmlElement argElementImportRoot,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure
+            final BlancoKeyGeneratorKtTableStructure argClassStructure
     ) {
         final List<BlancoXmlElement> listImportChildNodes = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementImportRoot, "import");
@@ -688,7 +685,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseDelegateList(
             final BlancoXmlElement argElementListRoot,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure
+            final BlancoKeyGeneratorKtTableStructure argClassStructure
     ) {
 
         final List<BlancoXmlElement> listChildNodes = BlancoXmlBindingUtil
@@ -747,7 +744,7 @@ public class BlancoKeyGeneratorKtXmlParser {
      */
     private void parseFieldList(
             final BlancoXmlElement argElementListRoot,
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final Map<String, String> argClassList
     ) {
 
@@ -772,7 +769,7 @@ public class BlancoKeyGeneratorKtXmlParser {
             String phpType = BlancoXmlBindingUtil.getTextContent(elementList, "type");
             if (BlancoStringUtil.null2Blank(phpType).length() == 0) {
                 // Type is required.
-                throw new IllegalArgumentException(fMsg.getMbvoji04(
+                throw new IllegalArgumentException(fMsg.getMbkgji04(
                         argClassStructure.getName(),
                         fieldStructure.getName()
                 ));
@@ -900,7 +897,7 @@ public class BlancoKeyGeneratorKtXmlParser {
 
             if (fieldStructure.getType() == null
                     || fieldStructure.getType().trim().length() == 0) {
-                throw new IllegalArgumentException(fMsg.getMbvoji02(
+                throw new IllegalArgumentException(fMsg.getMbkgji02(
                         argClassStructure.getName(), fieldStructure
                                 .getName()));
             }

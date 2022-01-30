@@ -20,7 +20,8 @@ import blanco.commons.util.BlancoNameUtil;
 import blanco.commons.util.BlancoStringUtil;
 import blanco.keygeneratorkt.message.BlancoKeyGeneratorKtMessage;
 import blanco.keygeneratorkt.resourcebundle.BlancoKeyGeneratorKtResourceBundle;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtClassStructure;
+import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketListStructure;
+import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure;
 import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtDelegateStructure;
 import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure;
 
@@ -124,22 +125,62 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
     }
 
     /**
-     * Auto-generates Kotlin source code from an intermediate XML file representing a value object.
+     * Auto-generates Kotlin source code from intermediate XML files.
+     * @param argFileMeta
+     * @param argDirectoryTarget
+     * @throws IOException
+     */
+    public void process(final File[] argFileMeta, File argDirectoryTarget) throws IOException {
+        BlancoKeyGeneratorKtBucketXmlParser parser = new BlancoKeyGeneratorKtBucketXmlParser();
+        parser.setVerbose(this.isVerbose());
+        parser.setPackageSuffix(this.fPackageSuffix);
+        parser.setOverridePackage(this.fOverridePackage);
+        /* First, process bucketList */
+        BlancoKeyGeneratorKtBucketListStructure bucketListStructure = null;
+        for (int index = 0; index < argFileMeta.length; index++) {
+            if (argFileMeta[index].getName().endsWith(".xml") == false) {
+                continue;
+            }
+            bucketListStructure = parser.parse(argFileMeta[index]);
+            if (bucketListStructure != null) {
+                break;
+            }
+        }
+        if (bucketListStructure == null) {
+            throw new IllegalArgumentException(fMsg.getMbkgja02());
+        }
+
+        /* Next, process each table */
+        BlancoKeyGeneratorKtTableStructure[] tableStructure = null;
+        for (int index = 0; index < argFileMeta.length; index++) {
+            if (argFileMeta[index].getName().endsWith(".xml") == false) {
+                continue;
+            }
+
+            this.process(argFileMeta[index], argDirectoryTarget, bucketListStructure);
+        }
+
+    }
+
+    /**
+     * Auto-generates Kotlin source code from an intermediate XML file.
      *
      * @param argMetaXmlSourceFile
      *            An XML file containing meta-information about the KeyGenerator.
      * @param argDirectoryTarget
      *            Source code generation destination directory.
+     * @param argBucketListStructure
      * @throws IOException
      *             If an I/O exception occurs.
      */
     public void process(final File argMetaXmlSourceFile,
-            final File argDirectoryTarget) throws IOException {
-        BlancoKeyGeneratorKtXmlParser parser = new BlancoKeyGeneratorKtXmlParser();
+                        final File argDirectoryTarget,
+                        final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure) throws IOException {
+        BlancoKeyGeneratorKtTableXmlParser parser = new BlancoKeyGeneratorKtTableXmlParser();
         parser.setVerbose(this.isVerbose());
         parser.setPackageSuffix(this.fPackageSuffix);
         parser.setOverridePackage(this.fOverridePackage);
-        final BlancoKeyGeneratorKtClassStructure[] structures = parser.parse(argMetaXmlSourceFile);
+        final BlancoKeyGeneratorKtTableStructure[] structures = parser.parse(argMetaXmlSourceFile, argBucketListStructure);
         for (int index = 0; index < structures.length; index++) {
             // Generates Kotlin source code from the obtained information.
             structure2Source(structures[index], argDirectoryTarget);
@@ -157,7 +198,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *             If an I/O exception occurs.
      */
     public void structure2Source(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final File argDirectoryTarget) throws IOException {
         /*
          * The output directory will be in the format specified by the targetStyle argument of the ant task.
@@ -217,7 +258,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         if (argClassStructure.getData() && !argClassStructure.getFinal()) {
             if (this.isVerbose()) {
                 System.out.println(fMsg
-                        .getMbvoji09(argClassStructure.getName()));
+                        .getMbkgji09(argClassStructure.getName()));
             }
             fCgClass.setFinal(true);
         } else {
@@ -228,7 +269,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         if (argClassStructure.getData() && argClassStructure.getAbstract()) {
             System.err.println("/* tueda */ Abstract has been specified for the data class");
             throw new IllegalArgumentException(fMsg
-                    .getMbvoji07(argClassStructure.getName()));
+                    .getMbkgji07(argClassStructure.getName()));
         }
         fCgClass.setAbstract(argClassStructure.getAbstract());
 
@@ -313,10 +354,10 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
             // If a required field is not set, exception processing will be performed.
             if (fieldStructure.getName() == null) {
                 throw new IllegalArgumentException(fMsg
-                        .getMbvoji03(argClassStructure.getName()));
+                        .getMbkgji03(argClassStructure.getName()));
             }
             if (fieldStructure.getType() == null) {
-                throw new IllegalArgumentException(fMsg.getMbvoji04(
+                throw new IllegalArgumentException(fMsg.getMbkgji04(
                         argClassStructure.getName(), fieldStructure.getName()));
             }
 
@@ -352,7 +393,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *            Field information.
      */
     private void buildField(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final BlancoKeyGeneratorKtFieldStructure argFieldStructure) {
 
         switch (fSheetLang) {
@@ -445,7 +486,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
                 /*
                  * java.util.Date type does not allow default values.
                  */
-                throw new IllegalArgumentException(fMsg.getMbvoji05(
+                throw new IllegalArgumentException(fMsg.getMbkgji05(
                         argClassStructure.getName(), argFieldStructure
                                 .getName(), argFieldStructure.getDefault(),
                         type));
@@ -467,7 +508,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
             if (!isConstArg && (defaultRawValue == null || defaultRawValue.length() <= 0)) {
                 System.err.println("/* tueda */ The field does not have a default value. blancoKeyGeneratorKt will not support abstract fields for the time being, so be sure to set the default value.");
                 throw new IllegalArgumentException(fMsg
-                        .getMbvoji08(argClassStructure.getName(), argFieldStructure.getName()));
+                        .getMbkgji08(argClassStructure.getName(), argFieldStructure.getName()));
             }
 
             // Sets the default value for the field.
@@ -509,7 +550,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
                     fCgSourceFile.getImportList().add(type);
                     field.setDefault(defaultRawValue);
                 } else {
-                    throw new IllegalArgumentException(fMsg.getMbvoji05(
+                    throw new IllegalArgumentException(fMsg.getMbkgji05(
                             argClassStructure.getName(), argFieldStructure
                                     .getName(), defaultRawValue,
                             type));
@@ -532,7 +573,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *            Field information.
      */
     private void buildMethodSet(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final BlancoKeyGeneratorKtFieldStructure argFieldStructure) {
         // Generates a setter method for each field.
         final BlancoCgMethod method = fCgFactory.createMethod("set"
@@ -577,7 +618,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *            Field information.
      */
     private void buildMethodGet(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final BlancoKeyGeneratorKtFieldStructure argFieldStructure) {
         // Generates a getter method for each field.
         final BlancoCgMethod method = fCgFactory.createMethod("get"
@@ -619,7 +660,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *            Class information.
      */
     private void buildMethodToString(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure) {
+            final BlancoKeyGeneratorKtTableStructure argClassStructure) {
         final BlancoCgMethod method = fCgFactory.createMethod("toString",
                 "Gets the string representation of this value object.");
         fCgClass.getMethodList().add(method);
@@ -698,7 +739,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      * @return Adjusted field name.
      */
     private String getFieldNameAdjustered(
-            final BlancoKeyGeneratorKtClassStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argClassStructure,
             final BlancoKeyGeneratorKtFieldStructure argFieldStructure) {
         return (argClassStructure.getAdjustFieldName() == false ? argFieldStructure
                 .getName()

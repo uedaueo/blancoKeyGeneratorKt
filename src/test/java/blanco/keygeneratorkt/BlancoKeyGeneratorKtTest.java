@@ -28,7 +28,7 @@ public class BlancoKeyGeneratorKtTest {
     @Test
     public void testBlancoKeyGeneratorKt() {
         BlancoValueObjectKtProcessInput input = new BlancoValueObjectKtProcessInput();
-        input.setMetadir("meta/objects");
+        input.setMetadir("meta/samples");
         input.setEncoding("UTF-8");
         input.setSheetType("php");
         input.setTmpdir("tmpTest");
@@ -46,7 +46,7 @@ public class BlancoKeyGeneratorKtTest {
         }
 
         BlancoKeyGeneratorKtProcessInput input2 = new BlancoKeyGeneratorKtProcessInput();
-        input2.setMetadir("meta/objects");
+        input2.setMetadir("meta/samples");
         input2.setEncoding("UTF-8");
         input2.setSheetType("php");
         input2.setTmpdir("tmpTest");
