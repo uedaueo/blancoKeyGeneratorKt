@@ -202,9 +202,223 @@ public class BlancoKeyGeneratorKtMessage {
     }
 
     /**
-     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJA01]の文字列を取得します。
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI10]の文字列を取得します。
+     *
+     * No.11:
+     * 文字列[クラス名[{0}] キー識別子桁数が整数値ではありません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji10(final String arg0) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji10] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI10] " + fBundle.getMbkgji10(arg0);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI11]の文字列を取得します。
      *
      * No.12:
+     * 文字列[クラス名[{0}] キー最大桁数が整数値ではありません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji11(final String arg0) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji11] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI11] " + fBundle.getMbkgji11(arg0);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI12]の文字列を取得します。
+     *
+     * No.13:
+     * 文字列[クラス名[{0}] レコード分割番号桁数が整数値ではありません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji12(final String arg0) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji12] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI12] " + fBundle.getMbkgji12(arg0);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI13]の文字列を取得します。
+     *
+     * No.14:
+     * 文字列[クラス名[{0}] バージョンが整数値ではありません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji13(final String arg0) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji13] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI13] " + fBundle.getMbkgji13(arg0);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI14]の文字列を取得します。
+     *
+     * No.15:
+     * 文字列[クラス名[{0}] で「キー一覧」が定義されていません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji14(final String arg0) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji14] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI14] " + fBundle.getMbkgji14(arg0);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI15]の文字列を取得します。
+     *
+     * No.16:
+     * 文字列[クラス名[{0}] のキー名[{1}]で「検索部」が定義されていません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @param arg1 置換文字列{1}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji15(final String arg0, final String arg1) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji15] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg1 == null) {
+            throw new IllegalArgumentException("The parameter [arg1] of the method [getMbkgji15] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI15] " + fBundle.getMbkgji15(arg0, arg1);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI16]の文字列を取得します。
+     *
+     * No.17:
+     * 文字列[クラス名[{0}] のキー名[{1}]で指定された項目[{2}] は項目一覧に定義されていません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @param arg1 置換文字列{1}の値。
+     * @param arg2 置換文字列{2}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji16(final String arg0, final String arg1, final String arg2) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji16] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg1 == null) {
+            throw new IllegalArgumentException("The parameter [arg1] of the method [getMbkgji16] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg2 == null) {
+            throw new IllegalArgumentException("The parameter [arg2] of the method [getMbkgji16] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI16] " + fBundle.getMbkgji16(arg0, arg1, arg2);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI17]の文字列を取得します。
+     *
+     * No.18:
+     * 文字列[クラス名[{0}] のキー名[{1}]で指定された項目[{2}] で型や桁数が指定されていません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @param arg1 置換文字列{1}の値。
+     * @param arg2 置換文字列{2}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji17(final String arg0, final String arg1, final String arg2) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji17] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg1 == null) {
+            throw new IllegalArgumentException("The parameter [arg1] of the method [getMbkgji17] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg2 == null) {
+            throw new IllegalArgumentException("The parameter [arg2] of the method [getMbkgji17] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI17] " + fBundle.getMbkgji17(arg0, arg1, arg2);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI18]の文字列を取得します。
+     *
+     * No.19:
+     * 文字列[クラス名[{0}] のキー名[{1}]で指定された項目[{2}] で指定された型[{3}]は使用できません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @param arg1 置換文字列{1}の値。
+     * @param arg2 置換文字列{2}の値。
+     * @param arg3 置換文字列{3}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji18(final String arg0, final String arg1, final String arg2, final String arg3) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji18] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg1 == null) {
+            throw new IllegalArgumentException("The parameter [arg1] of the method [getMbkgji18] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg2 == null) {
+            throw new IllegalArgumentException("The parameter [arg2] of the method [getMbkgji18] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg3 == null) {
+            throw new IllegalArgumentException("The parameter [arg3] of the method [getMbkgji18] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI18] " + fBundle.getMbkgji18(arg0, arg1, arg2, arg3);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJI19]の文字列を取得します。
+     *
+     * No.20:
+     * 文字列[クラス名[{0}] のキー名[{1}]で指定された項目[{2}] で指定された桁数[{3}]は整数値ではありません。]
+     *
+     * @param arg0 置換文字列{0}の値。
+     * @param arg1 置換文字列{1}の値。
+     * @param arg2 置換文字列{2}の値。
+     * @param arg3 置換文字列{3}の値。
+     * @return メッセージ文字列。
+     */
+    public String getMbkgji19(final String arg0, final String arg1, final String arg2, final String arg3) {
+        if (arg0 == null) {
+            throw new IllegalArgumentException("The parameter [arg0] of the method [getMbkgji19] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg1 == null) {
+            throw new IllegalArgumentException("The parameter [arg1] of the method [getMbkgji19] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg2 == null) {
+            throw new IllegalArgumentException("The parameter [arg2] of the method [getMbkgji19] has been given null. However, null cannot be given to this parameter.");
+        }
+        if (arg3 == null) {
+            throw new IllegalArgumentException("The parameter [arg3] of the method [getMbkgji19] has been given null. However, null cannot be given to this parameter.");
+        }
+
+        return "[MBKGJI19] " + fBundle.getMbkgji19(arg0, arg1, arg2, arg3);
+    }
+
+    /**
+     * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJA01]の文字列を取得します。
+     *
+     * No.22:
      * 文字列[メタディレクトリ[{0}]が存在しません。]
      *
      * @param arg0 置換文字列{0}の値。
@@ -221,7 +435,7 @@ public class BlancoKeyGeneratorKtMessage {
     /**
      * メッセージ定義ID[BlancoKeyGeneratorKt]、キー[MBKGJA02]の文字列を取得します。
      *
-     * No.13:
+     * No.23:
      * 文字列[キーバリューストアバケット定義書が存在しません。]
      *
      * @return メッセージ文字列。

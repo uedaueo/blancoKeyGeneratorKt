@@ -446,7 +446,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         }
 
         // Supports nullable.
-        Boolean isNullable = argFieldStructure.getNullable();
+        Boolean isNullable = !argFieldStructure.getNotNullable();
         if (isNullable != null && isNullable) {
             field.setNotnull(false);
         } else {

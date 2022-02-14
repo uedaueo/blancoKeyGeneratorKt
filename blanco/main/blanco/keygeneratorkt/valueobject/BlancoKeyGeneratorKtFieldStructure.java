@@ -90,9 +90,9 @@ public class BlancoKeyGeneratorKtFieldStructure {
      * nullable変数かどうか
      *
      * フィールド: [notNullable]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      */
-    private Boolean fNotNullable = true;
+    private Boolean fNotNullable = false;
 
     /**
      * 必須変数かどうか。必須の場合は @NotNull アノテーションが付与されます。
@@ -179,8 +179,9 @@ public class BlancoKeyGeneratorKtFieldStructure {
      * オープンであることを明示します。Kotlinの場合、デフォルトで非オープンです。
      *
      * フィールド: [open]。
+     * デフォルト: [false]。
      */
-    private Boolean fOpen;
+    private Boolean fOpen = false;
 
     /**
      * フィールド [no] の値を設定します。
@@ -442,7 +443,7 @@ public class BlancoKeyGeneratorKtFieldStructure {
      * フィールド [notNullable] の値を取得します。
      *
      * フィールドの説明: [nullable変数かどうか]。
-     * デフォルト: [true]。
+     * デフォルト: [false]。
      *
      * @return フィールド[notNullable]から取得した値。
      */
@@ -711,6 +712,7 @@ public class BlancoKeyGeneratorKtFieldStructure {
      * フィールド [open] の値を取得します。
      *
      * フィールドの説明: [オープンであることを明示します。Kotlinの場合、デフォルトで非オープンです。]。
+     * デフォルト: [false]。
      *
      * @return フィールド[open]から取得した値。
      */

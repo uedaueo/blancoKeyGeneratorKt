@@ -23,6 +23,13 @@ public class BlancoKeyGeneratorKtTableStructure {
     private String fPackage;
 
     /**
+     * テーブル表示名を指定します。必須項目です。
+     *
+     * フィールド: [displayName]。
+     */
+    private String fDisplayName;
+
+    /**
      * クラスの総称型を指定します。
      *
      * フィールド: [generic]。
@@ -194,6 +201,38 @@ public class BlancoKeyGeneratorKtTableStructure {
     private BlancoKeyGeneratorKtBucketStructure fBucket = new blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure();
 
     /**
+     * キー識別子の桁数を保持します。
+     *
+     * フィールド: [keyIdLength]。
+     * デフォルト: [2]。
+     */
+    private Integer fKeyIdLength = 2;
+
+    /**
+     * 検索用キー部の最大桁数を保持します。
+     *
+     * フィールド: [maxKeyLength]。
+     * デフォルト: [900]。
+     */
+    private Integer fMaxKeyLength = 900;
+
+    /**
+     * レコード分割番号部の桁数を保持します。
+     *
+     * フィールド: [recordSequenceLength]。
+     * デフォルト: [2]。
+     */
+    private Integer fRecordSequenceLength = 2;
+
+    /**
+     * テーブルのバージョン番号を保持します。
+     *
+     * フィールド: [tableVersion]。
+     * デフォルト: [2]。
+     */
+    private Integer fTableVersion = 2;
+
+    /**
      * フィールド [name] の値を設定します。
      *
      * フィールドの説明: [フィールド名を指定します。必須項目です。]。
@@ -235,6 +274,28 @@ public class BlancoKeyGeneratorKtTableStructure {
      */
     public String getPackage() {
         return fPackage;
+    }
+
+    /**
+     * フィールド [displayName] の値を設定します。
+     *
+     * フィールドの説明: [テーブル表示名を指定します。必須項目です。]。
+     *
+     * @param argDisplayName フィールド[displayName]に設定する値。
+     */
+    public void setDisplayName(final String argDisplayName) {
+        fDisplayName = argDisplayName;
+    }
+
+    /**
+     * フィールド [displayName] の値を取得します。
+     *
+     * フィールドの説明: [テーブル表示名を指定します。必須項目です。]。
+     *
+     * @return フィールド[displayName]から取得した値。
+     */
+    public String getDisplayName() {
+        return fDisplayName;
     }
 
     /**
@@ -739,6 +800,98 @@ public class BlancoKeyGeneratorKtTableStructure {
     }
 
     /**
+     * フィールド [keyIdLength] の値を設定します。
+     *
+     * フィールドの説明: [キー識別子の桁数を保持します。]。
+     *
+     * @param argKeyIdLength フィールド[keyIdLength]に設定する値。
+     */
+    public void setKeyIdLength(final Integer argKeyIdLength) {
+        fKeyIdLength = argKeyIdLength;
+    }
+
+    /**
+     * フィールド [keyIdLength] の値を取得します。
+     *
+     * フィールドの説明: [キー識別子の桁数を保持します。]。
+     * デフォルト: [2]。
+     *
+     * @return フィールド[keyIdLength]から取得した値。
+     */
+    public Integer getKeyIdLength() {
+        return fKeyIdLength;
+    }
+
+    /**
+     * フィールド [maxKeyLength] の値を設定します。
+     *
+     * フィールドの説明: [検索用キー部の最大桁数を保持します。]。
+     *
+     * @param argMaxKeyLength フィールド[maxKeyLength]に設定する値。
+     */
+    public void setMaxKeyLength(final Integer argMaxKeyLength) {
+        fMaxKeyLength = argMaxKeyLength;
+    }
+
+    /**
+     * フィールド [maxKeyLength] の値を取得します。
+     *
+     * フィールドの説明: [検索用キー部の最大桁数を保持します。]。
+     * デフォルト: [900]。
+     *
+     * @return フィールド[maxKeyLength]から取得した値。
+     */
+    public Integer getMaxKeyLength() {
+        return fMaxKeyLength;
+    }
+
+    /**
+     * フィールド [recordSequenceLength] の値を設定します。
+     *
+     * フィールドの説明: [レコード分割番号部の桁数を保持します。]。
+     *
+     * @param argRecordSequenceLength フィールド[recordSequenceLength]に設定する値。
+     */
+    public void setRecordSequenceLength(final Integer argRecordSequenceLength) {
+        fRecordSequenceLength = argRecordSequenceLength;
+    }
+
+    /**
+     * フィールド [recordSequenceLength] の値を取得します。
+     *
+     * フィールドの説明: [レコード分割番号部の桁数を保持します。]。
+     * デフォルト: [2]。
+     *
+     * @return フィールド[recordSequenceLength]から取得した値。
+     */
+    public Integer getRecordSequenceLength() {
+        return fRecordSequenceLength;
+    }
+
+    /**
+     * フィールド [tableVersion] の値を設定します。
+     *
+     * フィールドの説明: [テーブルのバージョン番号を保持します。]。
+     *
+     * @param argTableVersion フィールド[tableVersion]に設定する値。
+     */
+    public void setTableVersion(final Integer argTableVersion) {
+        fTableVersion = argTableVersion;
+    }
+
+    /**
+     * フィールド [tableVersion] の値を取得します。
+     *
+     * フィールドの説明: [テーブルのバージョン番号を保持します。]。
+     * デフォルト: [2]。
+     *
+     * @return フィールド[tableVersion]から取得した値。
+     */
+    public Integer getTableVersion() {
+        return fTableVersion;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -755,6 +908,7 @@ public class BlancoKeyGeneratorKtTableStructure {
         buf.append("blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure[");
         buf.append("name=" + fName);
         buf.append(",package=" + fPackage);
+        buf.append(",displayName=" + fDisplayName);
         buf.append(",generic=" + fGeneric);
         buf.append(",description=" + fDescription);
         buf.append(",descriptionList=" + fDescriptionList);
@@ -777,6 +931,10 @@ public class BlancoKeyGeneratorKtTableStructure {
         buf.append(",packageSuffix=" + fPackageSuffix);
         buf.append(",overridePackage=" + fOverridePackage);
         buf.append(",bucket=" + fBucket);
+        buf.append(",keyIdLength=" + fKeyIdLength);
+        buf.append(",maxKeyLength=" + fMaxKeyLength);
+        buf.append(",recordSequenceLength=" + fRecordSequenceLength);
+        buf.append(",tableVersion=" + fTableVersion);
         buf.append("]");
         return buf.toString();
     }
@@ -805,6 +963,9 @@ public class BlancoKeyGeneratorKtTableStructure {
         // Name: fPackage
         // Type: java.lang.String
         target.fPackage = this.fPackage;
+        // Name: fDisplayName
+        // Type: java.lang.String
+        target.fDisplayName = this.fDisplayName;
         // Name: fGeneric
         // Type: java.lang.String
         target.fGeneric = this.fGeneric;
@@ -871,5 +1032,17 @@ public class BlancoKeyGeneratorKtTableStructure {
         // Name: fBucket
         // Type: blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure
         // フィールド[fBucket]はサポート外の型[blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketStructure]です。
+        // Name: fKeyIdLength
+        // Type: java.lang.Integer
+        target.fKeyIdLength = this.fKeyIdLength;
+        // Name: fMaxKeyLength
+        // Type: java.lang.Integer
+        target.fMaxKeyLength = this.fMaxKeyLength;
+        // Name: fRecordSequenceLength
+        // Type: java.lang.Integer
+        target.fRecordSequenceLength = this.fRecordSequenceLength;
+        // Name: fTableVersion
+        // Type: java.lang.Integer
+        target.fTableVersion = this.fTableVersion;
     }
 }

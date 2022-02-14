@@ -1,6 +1,7 @@
 package blanco.keygeneratorkt.valueobject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * キージェネレータのバケットをあらわすバリューオブジェクトクラス。このクラスの設定情報をもとにフィールドとセッター・ゲッターが自動生成されます。
@@ -55,6 +56,14 @@ public class BlancoKeyGeneratorKtBucketStructure {
      * デフォルト: [new java.util.ArrayList&lt;java.lang.String&gt;()]。
      */
     private List<String> fDescriptionList = new java.util.ArrayList<java.lang.String>();
+
+    /**
+     * このバケットに配置するテーブルです。table番号をキーにMapに保管することで、テーブル番号の重複を防ぎます。
+     *
+     * フィールド: [tableMap]。
+     * デフォルト: [new java.util.HashMap&lt;java.lang.String, blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure&gt;()]。
+     */
+    private Map<String, BlancoKeyGeneratorKtTableStructure> fTableMap = new java.util.HashMap<java.lang.String, blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure>();
 
     /**
      * フィールド [no] の値を設定します。
@@ -212,6 +221,29 @@ public class BlancoKeyGeneratorKtBucketStructure {
     }
 
     /**
+     * フィールド [tableMap] の値を設定します。
+     *
+     * フィールドの説明: [このバケットに配置するテーブルです。table番号をキーにMapに保管することで、テーブル番号の重複を防ぎます。]。
+     *
+     * @param argTableMap フィールド[tableMap]に設定する値。
+     */
+    public void setTableMap(final Map<String, BlancoKeyGeneratorKtTableStructure> argTableMap) {
+        fTableMap = argTableMap;
+    }
+
+    /**
+     * フィールド [tableMap] の値を取得します。
+     *
+     * フィールドの説明: [このバケットに配置するテーブルです。table番号をキーにMapに保管することで、テーブル番号の重複を防ぎます。]。
+     * デフォルト: [new java.util.HashMap&lt;java.lang.String, blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure&gt;()]。
+     *
+     * @return フィールド[tableMap]から取得した値。
+     */
+    public Map<String, BlancoKeyGeneratorKtTableStructure> getTableMap() {
+        return fTableMap;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -233,6 +265,7 @@ public class BlancoKeyGeneratorKtBucketStructure {
         buf.append(",version=" + fVersion);
         buf.append(",description=" + fDescription);
         buf.append(",descriptionList=" + fDescriptionList);
+        buf.append(",tableMap=" + fTableMap);
         buf.append("]");
         return buf.toString();
     }
@@ -276,5 +309,8 @@ public class BlancoKeyGeneratorKtBucketStructure {
         // Name: fDescriptionList
         // Type: java.util.List
         // フィールド[fDescriptionList]はサポート外の型[java.util.Listjava.lang.String]です。
+        // Name: fTableMap
+        // Type: java.util.Map
+        // フィールド[fTableMap]はサポート外の型[java.util.Mapjava.lang.String, blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure]です。
     }
 }

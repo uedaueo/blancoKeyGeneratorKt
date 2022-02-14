@@ -24,15 +24,17 @@ public class BlancoKeyGeneratorKtKeyStructure {
      * 型名をパッケージ名のフル修飾付で指定します。必須項目です。
      *
      * フィールド: [keyPart]。
+     * デフォルト: [new java.util.ArrayList&lt;&gt;()]。
      */
-    private String fKeyPart;
+    private List<BlancoKeyGeneratorKtKeyPhrase> fKeyPart = new java.util.ArrayList<>();
 
     /**
      * 型が期待する総称型の具体的な型名を指定します．
      *
      * フィールド: [valuePart]。
+     * デフォルト: [new java.util.ArrayList&lt;&gt;()]。
      */
-    private String fValuePart;
+    private List<BlancoKeyGeneratorKtKeyPhrase> fValuePart = new java.util.ArrayList<>();
 
     /**
      * フィールドの説明です。
@@ -100,7 +102,7 @@ public class BlancoKeyGeneratorKtKeyStructure {
      *
      * @param argKeyPart フィールド[keyPart]に設定する値。
      */
-    public void setKeyPart(final String argKeyPart) {
+    public void setKeyPart(final List<BlancoKeyGeneratorKtKeyPhrase> argKeyPart) {
         fKeyPart = argKeyPart;
     }
 
@@ -108,10 +110,11 @@ public class BlancoKeyGeneratorKtKeyStructure {
      * フィールド [keyPart] の値を取得します。
      *
      * フィールドの説明: [型名をパッケージ名のフル修飾付で指定します。必須項目です。]。
+     * デフォルト: [new java.util.ArrayList&lt;&gt;()]。
      *
      * @return フィールド[keyPart]から取得した値。
      */
-    public String getKeyPart() {
+    public List<BlancoKeyGeneratorKtKeyPhrase> getKeyPart() {
         return fKeyPart;
     }
 
@@ -122,7 +125,7 @@ public class BlancoKeyGeneratorKtKeyStructure {
      *
      * @param argValuePart フィールド[valuePart]に設定する値。
      */
-    public void setValuePart(final String argValuePart) {
+    public void setValuePart(final List<BlancoKeyGeneratorKtKeyPhrase> argValuePart) {
         fValuePart = argValuePart;
     }
 
@@ -130,10 +133,11 @@ public class BlancoKeyGeneratorKtKeyStructure {
      * フィールド [valuePart] の値を取得します。
      *
      * フィールドの説明: [型が期待する総称型の具体的な型名を指定します．]。
+     * デフォルト: [new java.util.ArrayList&lt;&gt;()]。
      *
      * @return フィールド[valuePart]から取得した値。
      */
-    public String getValuePart() {
+    public List<BlancoKeyGeneratorKtKeyPhrase> getValuePart() {
         return fValuePart;
     }
 
@@ -232,11 +236,11 @@ public class BlancoKeyGeneratorKtKeyStructure {
         // Type: java.lang.String
         target.fName = this.fName;
         // Name: fKeyPart
-        // Type: java.lang.String
-        target.fKeyPart = this.fKeyPart;
+        // Type: List
+        // フィールド[fKeyPart]はサポート外の型[Listblanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyPhrase]です。
         // Name: fValuePart
-        // Type: java.lang.String
-        target.fValuePart = this.fValuePart;
+        // Type: List
+        // フィールド[fValuePart]はサポート外の型[Listblanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtKeyPhrase]です。
         // Name: fDescription
         // Type: java.lang.String
         target.fDescription = this.fDescription;

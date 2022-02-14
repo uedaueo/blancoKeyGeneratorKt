@@ -44,6 +44,9 @@
 
       <propertyblock name="blancokeygenerator-common" waitY="1">
         <startstring>キーバリューストアテーブル定義・共通</startstring>
+        <propertykey name="displayName" waitX="2">
+          <value>テーブル表示名</value>
+        </propertykey>
         <propertykey name="bucket" waitX="2">
           <value>バケットID</value>
         </propertykey>
@@ -132,7 +135,7 @@
 
       </tableblock>
 
-      <tableblock name="blancovalueobjectkt-delegate" waitY="2" titleheight="3" rowname="delegate">
+      <tableblock name="blancokeygenerator-delegate" waitY="2" titleheight="3" rowname="delegate">
         <startstring>キーバリューストアテーブル定義・委譲</startstring>
         <tablecolumn name="no">
           <value>No.</value>
