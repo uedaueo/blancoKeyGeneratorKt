@@ -228,9 +228,17 @@ public class BlancoKeyGeneratorKtTableStructure {
      * テーブルのバージョン番号を保持します。
      *
      * フィールド: [tableVersion]。
-     * デフォルト: [2]。
+     * デフォルト: [1]。
      */
-    private Integer fTableVersion = 2;
+    private Integer fTableVersion = 1;
+
+    /**
+     * バケット内でユニークなテーブル番号を1 - 4095 までの整数で保持します。
+     *
+     * フィールド: [tableNumber]。
+     * デフォルト: [1]。
+     */
+    private Integer fTableNumber = 1;
 
     /**
      * フィールド [name] の値を設定します。
@@ -883,12 +891,35 @@ public class BlancoKeyGeneratorKtTableStructure {
      * フィールド [tableVersion] の値を取得します。
      *
      * フィールドの説明: [テーブルのバージョン番号を保持します。]。
-     * デフォルト: [2]。
+     * デフォルト: [1]。
      *
      * @return フィールド[tableVersion]から取得した値。
      */
     public Integer getTableVersion() {
         return fTableVersion;
+    }
+
+    /**
+     * フィールド [tableNumber] の値を設定します。
+     *
+     * フィールドの説明: [バケット内でユニークなテーブル番号を1 - 4095 までの整数で保持します。]。
+     *
+     * @param argTableNumber フィールド[tableNumber]に設定する値。
+     */
+    public void setTableNumber(final Integer argTableNumber) {
+        fTableNumber = argTableNumber;
+    }
+
+    /**
+     * フィールド [tableNumber] の値を取得します。
+     *
+     * フィールドの説明: [バケット内でユニークなテーブル番号を1 - 4095 までの整数で保持します。]。
+     * デフォルト: [1]。
+     *
+     * @return フィールド[tableNumber]から取得した値。
+     */
+    public Integer getTableNumber() {
+        return fTableNumber;
     }
 
     /**
@@ -935,6 +966,7 @@ public class BlancoKeyGeneratorKtTableStructure {
         buf.append(",maxKeyLength=" + fMaxKeyLength);
         buf.append(",recordSequenceLength=" + fRecordSequenceLength);
         buf.append(",tableVersion=" + fTableVersion);
+        buf.append(",tableNumber=" + fTableNumber);
         buf.append("]");
         return buf.toString();
     }
@@ -1044,5 +1076,8 @@ public class BlancoKeyGeneratorKtTableStructure {
         // Name: fTableVersion
         // Type: java.lang.Integer
         target.fTableVersion = this.fTableVersion;
+        // Name: fTableNumber
+        // Type: java.lang.Integer
+        target.fTableNumber = this.fTableNumber;
     }
 }

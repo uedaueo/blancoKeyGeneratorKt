@@ -546,6 +546,183 @@ class BlancoKeyGeneratorKtMessageResourceBundle {
     }
 
     /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI20]
+     *
+     * [クラス名[{0}] でバケットIDが指定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI20]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji20(final String arg0) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] でバケットIDが指定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI20");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI21]
+     *
+     * [クラス名[{0}] でバケットID [{1}] は定義されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI21]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji21(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] でバケットID [{1}] は定義されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI21");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI22]
+     *
+     * [クラス名[{0}] でテーブル番号が定義されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI22]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji22(final String arg0) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] でテーブル番号が定義されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI22");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI23]
+     *
+     * [クラス名[{0}] で指定されたテーブル番号[{1}]は、バケット [{2}] 内でテーブル（[{3}]）が使用しています。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @param arg2 置換文字列{2}を置換する値。java.lang.String型を与えてください。
+     * @param arg3 置換文字列{3}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI23]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji23(final String arg0, final String arg1, final String arg2, final String arg3) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] で指定されたテーブル番号[{1}]は、バケット [{2}] 内でテーブル（[{3}]）が使用しています。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI23");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1, arg2, arg3}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI24]
+     *
+     * [クラス名[{0}] のキー名[{1}]でキーの長さが最大長[{2}]を超えて指定されています。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @param arg2 置換文字列{2}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI24]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji24(final String arg0, final String arg1, final String arg2) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] のキー名[{1}]でキーの長さが最大長[{2}]を超えて指定されています。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI24");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1, arg2}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI25]
+     *
+     * [クラス名[{0}] テーブル番号が 1 - [{1}] の整数値ではありません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI25]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji25(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] テーブル番号が 1 - [{1}] の整数値ではありません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI25");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJI26]
+     *
+     * [クラス名[{0}] のキー名 [{1}] で指定された項目[{2}]の型がbase64の場合、桁数は4の倍数でなければなりません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @param arg2 置換文字列{2}を置換する値。java.lang.String型を与えてください。
+     * @return key[MBKGJI26]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getMbkgji26(final String arg0, final String arg1, final String arg2) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "クラス名[{0}] のキー名 [{1}] で指定された項目[{2}]の型がbase64の場合、桁数は4の倍数でなければなりません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("MBKGJI26");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1, arg2}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
      * bundle[BlancoKeyGeneratorKtMessage], key[MBKGJA01]
      *
      * [メタディレクトリ[{0}]が存在しません。] (ja)<br>

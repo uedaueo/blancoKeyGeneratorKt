@@ -50,7 +50,7 @@
         <propertykey name="bucket" waitX="2">
           <value>バケットID</value>
         </propertykey>
-        <propertykey name="no" waitX="2">
+        <propertykey name="tableNumber" waitX="2">
           <value>テーブル番号</value>
         </propertykey>
         <propertykey name="name" waitX="2">

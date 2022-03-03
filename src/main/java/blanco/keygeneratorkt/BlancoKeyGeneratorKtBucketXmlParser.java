@@ -257,10 +257,17 @@ public class BlancoKeyGeneratorKtBucketXmlParser {
             if (BlancoStringUtil.null2Blank(bucketStructure.getKvsType()).trim().length() == 0) {
                 continue;
             }
-            bucketStructure.setTableIdLength(BlancoXmlBindingUtil.getTextContent(elementList, "tableIdLength"));
-            if (BlancoStringUtil.null2Blank(bucketStructure.getTableIdLength()).trim().length() == 0) {
+            String strTableIdLength = BlancoXmlBindingUtil.getTextContent(elementList, "tableIdLength").trim();
+            if (BlancoStringUtil.null2Blank(strTableIdLength).length() == 0) {
                 continue;
             }
+            try {
+                bucketStructure.setTableIdLength(Integer.parseInt(strTableIdLength));
+            } catch (NumberFormatException e) {
+                System.out.println(e);
+                continue;
+            }
+
             bucketStructure.setVersion(BlancoXmlBindingUtil.getTextContent(elementList, "version"));
             if (BlancoStringUtil.null2Blank(bucketStructure.getVersion()).trim().length() == 0) {
                 continue;

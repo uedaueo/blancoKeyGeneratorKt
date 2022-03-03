@@ -44,10 +44,12 @@ public class BlancoKeyGeneratorKtTableXmlParser {
     private final List<String> keyTypes = new ArrayList<>(
             Arrays.asList(
                     "raw",
+                    "b64",
                     "hex",
                     "bin",
                     "sha1",
-                    "sha256"
+                    "sha256",
+                    "json"
             )
     );
 
@@ -91,7 +93,7 @@ public class BlancoKeyGeneratorKtTableXmlParser {
      *            An intermediate XML file.
      * @return An array of information obtained as a result of parsing.
      */
-    public BlancoKeyGeneratorKtTableStructure[] parse(
+    public List<BlancoKeyGeneratorKtTableStructure> parse(
             final File argMetaXmlSourceFile,
             final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
     ) {
@@ -114,7 +116,7 @@ public class BlancoKeyGeneratorKtTableXmlParser {
      *            XML document of an intermediate XML file.
      * @return An array of value object information obtained as a result of parsing.
      */
-    public BlancoKeyGeneratorKtTableStructure[] parse(
+    public List<BlancoKeyGeneratorKtTableStructure> parse(
             final BlancoXmlDocument argXmlDocument,
             final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
     ) {
@@ -170,18 +172,15 @@ public class BlancoKeyGeneratorKtTableXmlParser {
                 continue;
             }
 
-            BlancoKeyGeneratorKtTableStructure objClassStructure = parseElementSheetPhp(elementSheet, BlancoKeyGeneratorKtUtil.packageMap);
+            BlancoKeyGeneratorKtTableStructure objTableStructure = parseElementSheetPhp(elementSheet, argBucketListStructure, BlancoKeyGeneratorKtUtil.packageMap);
 
-            if (objClassStructure != null) {
+            if (objTableStructure != null) {
                 // Saves the obtained information.
-                listStructure.add(objClassStructure);
+                listStructure.add(objTableStructure);
             }
         }
 
-        final BlancoKeyGeneratorKtTableStructure[] result = new BlancoKeyGeneratorKtTableStructure[listStructure
-                .size()];
-        listStructure.toArray(result);
-        return result;
+        return listStructure;
     }
 
     /**
@@ -189,11 +188,13 @@ public class BlancoKeyGeneratorKtTableXmlParser {
      *
      * @param argElementSheet
      *            "sheet" XML element in the intermediate XML file.
+     * @param argBucketListStructure
      * @return Value object information obtained as a result of parsing. Null is returned if "name" is not found.
      */
     public BlancoKeyGeneratorKtTableStructure parseElementSheetPhp(
             final BlancoXmlElement argElementSheet,
-            final Map<String, String> argClassList) {
+            BlancoKeyGeneratorKtBucketListStructure argBucketListStructure, final Map<String, String> argClassList
+    ) {
         final BlancoKeyGeneratorKtTableStructure objTableStructure = new BlancoKeyGeneratorKtTableStructure();
         final List<BlancoXmlElement> listCommon = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet,
@@ -215,7 +216,7 @@ public class BlancoKeyGeneratorKtTableXmlParser {
 
         // keyGenerator definition (PHP) common, just use first one.
         final BlancoXmlElement elementCommon = listCommon.get(0);
-        parseCommonPhp(elementCommon, objTableStructure);
+        parseCommonPhp(elementCommon, objTableStructure, argBucketListStructure);
         if (BlancoStringUtil.null2Blank(objTableStructure.getName()).trim()
                 .length() == 0) {
             // Skips if name is empty.
@@ -351,31 +352,72 @@ public class BlancoKeyGeneratorKtTableXmlParser {
     /**
      * keyGenerator definition (PHP) common
      * @param argElementCommon
-     * @param argClassStructure
+     * @param argTableStructure
+     * @param argBucketListStructure
      */
     private void parseCommonPhp(
             final BlancoXmlElement argElementCommon,
-            final BlancoKeyGeneratorKtTableStructure argClassStructure
+            final BlancoKeyGeneratorKtTableStructure argTableStructure,
+            BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
     ) {
-        argClassStructure.setName(BlancoXmlBindingUtil.getTextContent(
+        argTableStructure.setName(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "name"));
-        argClassStructure.setPackage(BlancoXmlBindingUtil.getTextContent(
+        argTableStructure.setPackage(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "package"));
-        argClassStructure.setDisplayName(BlancoXmlBindingUtil.getTextContent(argElementCommon, "displayName"));
+        argTableStructure.setDisplayName(BlancoXmlBindingUtil.getTextContent(argElementCommon, "displayName"));
 
-        argClassStructure.setDescription(BlancoXmlBindingUtil.getTextContent(
+        String bucketId = BlancoXmlBindingUtil.getTextContent(argElementCommon, "bucket");
+        if (BlancoStringUtil.null2Blank(bucketId).length() == 0) {
+            throw new IllegalArgumentException(fMsg.getMbkgji20(argTableStructure.getName()));
+        }
+        BlancoKeyGeneratorKtBucketStructure bucketStructure = getBucket(bucketId, argBucketListStructure);
+        if (bucketStructure == null) {
+            throw new IllegalArgumentException(fMsg.getMbkgji21(argTableStructure.getName(), bucketId));
+        }
+        argTableStructure.setBucket(bucketStructure);
+
+        /*
+         * calculate table number range.
+         */
+        Integer figureNum = bucketStructure.getTableIdLength();
+
+
+        String strTableNumber = BlancoXmlBindingUtil.getTextContent(argElementCommon, "tableNumber");
+        if (BlancoStringUtil.null2Blank(strTableNumber).length() == 0) {
+            throw new IllegalArgumentException(fMsg.getMbkgji22(argTableStructure.getName()));
+        }
+
+        Integer maxTableNumber = ((Double)Math.pow(2, 6 * bucketStructure.getTableIdLength())).intValue();
+        Integer tableNumber = 0;
+        try {
+            tableNumber = Integer.parseInt(strTableNumber);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(fMsg.getMbkgji25(argTableStructure.getName(), "" + maxTableNumber));
+        }
+        if (tableNumber >= maxTableNumber) {
+            throw new IllegalArgumentException(fMsg.getMbkgji25(argTableStructure.getName(), "" + maxTableNumber));
+        }
+        argTableStructure.setTableNumber(tableNumber);
+
+        BlancoKeyGeneratorKtTableStructure dupTable = bucketStructure.getTableMap().get(argTableStructure.getTableNumber());
+        if (dupTable != null) {
+            throw new IllegalArgumentException(fMsg.getMbkgji23(argTableStructure.getName(), "" + argTableStructure.getTableNumber(), bucketStructure.getName(), dupTable.getName()));
+        }
+        bucketStructure.getTableMap().put(argTableStructure.getTableNumber(), argTableStructure);
+
+        argTableStructure.setDescription(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "description"));
-        if (BlancoStringUtil.null2Blank(argClassStructure.getDescription())
+        if (BlancoStringUtil.null2Blank(argTableStructure.getDescription())
                 .length() > 0) {
-            final String[] lines = BlancoNameUtil.splitString(argClassStructure
+            final String[] lines = BlancoNameUtil.splitString(argTableStructure
                     .getDescription(), '\n');
             for (int index = 0; index < lines.length; index++) {
                 if (index == 0) {
-                    argClassStructure.setDescription(lines[index]);
+                    argTableStructure.setDescription(lines[index]);
                 } else {
                     // For a multi-line description, it will be split and stored.
                     // From the second line, assumes that character reference encoding has been properly implemented.
-                    argClassStructure.getDescriptionList().add(lines[index]);
+                    argTableStructure.getDescriptionList().add(lines[index]);
                 }
             }
         }
@@ -384,7 +426,7 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         String classGenerics = BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "generic");
         if (BlancoStringUtil.null2Blank(classGenerics).length() > 0) {
-            argClassStructure.setGeneric(classGenerics);
+            argTableStructure.setGeneric(classGenerics);
         }
 
 
@@ -396,20 +438,20 @@ public class BlancoKeyGeneratorKtTableXmlParser {
                     argElementCommon, "annotation");
         }
         if (BlancoStringUtil.null2Blank(classAnnotation).length() > 0) {
-            argClassStructure.setAnnotationList(createAnnotaionList(classAnnotation));
+            argTableStructure.setAnnotationList(createAnnotaionList(classAnnotation));
         }
 
-        argClassStructure.setAccess("public");
-        argClassStructure.setFinal(true);
-        argClassStructure.setAbstract(false);
-        argClassStructure.setData(false);
-        argClassStructure.setGenerateToString(false);
-        argClassStructure.setAdjustFieldName(true);
-        argClassStructure.setAdjustDefaultValue(false);
-        argClassStructure.setFieldList(new ArrayList<>());
-        argClassStructure.setKeyList(new ArrayList<>());
-        argClassStructure.setDelegateList(new ArrayList<>());
-        argClassStructure.setFileDescription(BlancoXmlBindingUtil.getTextContent(
+        argTableStructure.setAccess("public");
+        argTableStructure.setFinal(true);
+        argTableStructure.setAbstract(false);
+        argTableStructure.setData(false);
+        argTableStructure.setGenerateToString(false);
+        argTableStructure.setAdjustFieldName(true);
+        argTableStructure.setAdjustDefaultValue(false);
+        argTableStructure.setFieldList(new ArrayList<>());
+        argTableStructure.setKeyList(new ArrayList<>());
+        argTableStructure.setDelegateList(new ArrayList<>());
+        argTableStructure.setFileDescription(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "fileDescription"));
 
         String strKeyIdLength = BlancoXmlBindingUtil.getTextContent(argElementCommon, "keyIdLength");
@@ -417,9 +459,9 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         if (BlancoStringUtil.null2Blank(strKeyIdLength).length() != 0) {
             try {
                 keyIdLength = Integer.parseInt(strKeyIdLength);
-                argClassStructure.setKeyIdLength(keyIdLength);
+                argTableStructure.setKeyIdLength(keyIdLength);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(fMsg.getMbkgji10(argClassStructure.getName()));
+                throw new IllegalArgumentException(fMsg.getMbkgji10(argTableStructure.getName()));
             }
         }
 
@@ -428,9 +470,9 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         if (BlancoStringUtil.null2Blank(strMaxKeyLength).length() != 0) {
             try {
                 maxKeyLength = Integer.parseInt(strMaxKeyLength);
-                argClassStructure.setMaxKeyLength(maxKeyLength);
+                argTableStructure.setMaxKeyLength(maxKeyLength);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(fMsg.getMbkgji11(argClassStructure.getName()));
+                throw new IllegalArgumentException(fMsg.getMbkgji11(argTableStructure.getName()));
             }
         }
 
@@ -439,9 +481,9 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         if (BlancoStringUtil.null2Blank(strRecordSequenceLength).length() != 0) {
             try {
                 recordSequenceLength = Integer.parseInt(strRecordSequenceLength);
-                argClassStructure.setRecordSequenceLength(recordSequenceLength);
+                argTableStructure.setRecordSequenceLength(recordSequenceLength);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(fMsg.getMbkgji12(argClassStructure.getName()));
+                throw new IllegalArgumentException(fMsg.getMbkgji12(argTableStructure.getName()));
             }
         }
 
@@ -450,15 +492,15 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         if (BlancoStringUtil.null2Blank(strTableVersion).length() != 0) {
             try {
                 tableVersion = Integer.parseInt(strTableVersion);
-                argClassStructure.setTableVersion(tableVersion);
+                argTableStructure.setTableVersion(tableVersion);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(fMsg.getMbkgji13(argClassStructure.getName()));
+                throw new IllegalArgumentException(fMsg.getMbkgji13(argTableStructure.getName()));
             }
         }
 
-        if (argClassStructure.getPackage() == null) {
+        if (argTableStructure.getPackage() == null) {
             throw new IllegalArgumentException(fMsg
-                    .getMbkgji01(argClassStructure.getName()));
+                    .getMbkgji01(argTableStructure.getName()));
         }
     }
 
@@ -827,6 +869,14 @@ public class BlancoKeyGeneratorKtTableXmlParser {
             }
 
             /*
+             * Check key legth
+             */
+            int keyLength = this.calcKeyLength(keyPartList) + this.calcKeyLength(valuePartList);
+            if (keyLength > argTableStructure.getMaxKeyLength()) {
+                throw new IllegalArgumentException(fMsg.getMbkgji24(argTableStructure.getName(), keyStructure.getName(), "" + argTableStructure.getMaxKeyLength()));
+            }
+
+            /*
              * Get description
              */
             keyStructure.setDescription(BlancoXmlBindingUtil
@@ -900,6 +950,15 @@ public class BlancoKeyGeneratorKtTableXmlParser {
                     throw new IllegalArgumentException(fMsg.getMbkgji19(argTableStructure.getName(), argKeyStructure.getName(), itemName, strLength), e);
                 }
 
+                /*
+                 * base64's one character means 6 bits data,
+                 * so base64 length should be a multiple of 4
+                 * to bind 8 bits boundary.
+                 */
+                if ("b64".equals(type) && length % 4 != 0) {
+                    throw new IllegalArgumentException(fMsg.getMbkgji26(argTableStructure.getName(), argKeyStructure.getName(), itemName));
+                }
+
                 BlancoKeyGeneratorKtKeyPhrase keyPhrase = new BlancoKeyGeneratorKtKeyPhrase();
                 list.add(keyPhrase);
                 keyPhrase.setName(itemName);
@@ -909,5 +968,39 @@ public class BlancoKeyGeneratorKtTableXmlParser {
         }
 
         return list;
+    }
+
+    /**
+     * retrieve bucketStructure from bucketList.
+     * if bucketId never matched, return null;
+     *
+     * @param argBucketId
+     * @param bucketListStructure
+     * @return
+     */
+    private BlancoKeyGeneratorKtBucketStructure getBucket(final String argBucketId, BlancoKeyGeneratorKtBucketListStructure bucketListStructure) {
+        BlancoKeyGeneratorKtBucketStructure bucketStructure = null;
+        for (BlancoKeyGeneratorKtBucketStructure bucket : bucketListStructure
+                .getBucketList()) {
+            if (argBucketId.equals(bucket.getName())) {
+                bucketStructure = bucket;
+                break;
+            }
+        }
+        return bucketStructure;
+    }
+
+    /**
+     * Get key length (in bytes) from keyPhraseList.
+     * @param argKeyPhraseList
+     * @return
+     */
+    private int calcKeyLength(final List<BlancoKeyGeneratorKtKeyPhrase> argKeyPhraseList) {
+        int length = 0;
+        for (BlancoKeyGeneratorKtKeyPhrase keyPhrase : argKeyPhraseList) {
+            length += keyPhrase.getLength();
+        }
+        length += argKeyPhraseList.size() - 1;
+        return length;
     }
 }

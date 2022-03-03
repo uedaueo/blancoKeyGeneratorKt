@@ -20,13 +20,11 @@ import blanco.commons.util.BlancoNameUtil;
 import blanco.commons.util.BlancoStringUtil;
 import blanco.keygeneratorkt.message.BlancoKeyGeneratorKtMessage;
 import blanco.keygeneratorkt.resourcebundle.BlancoKeyGeneratorKtResourceBundle;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtBucketListStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtTableStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtDelegateStructure;
-import blanco.keygeneratorkt.valueobject.BlancoKeyGeneratorKtFieldStructure;
+import blanco.keygeneratorkt.valueobject.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -151,15 +149,22 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         }
 
         /* Next, process each table */
-        BlancoKeyGeneratorKtTableStructure[] tableStructure = null;
+        List<BlancoKeyGeneratorKtTableStructure> allTableStructures = new ArrayList<>();
         for (int index = 0; index < argFileMeta.length; index++) {
             if (argFileMeta[index].getName().endsWith(".xml") == false) {
                 continue;
             }
 
-            this.process(argFileMeta[index], argDirectoryTarget, bucketListStructure);
+            List<BlancoKeyGeneratorKtTableStructure> tableStructureList = this.process(argFileMeta[index], argDirectoryTarget, bucketListStructure);
+            if (tableStructureList.size() != 0) {
+                allTableStructures.addAll(tableStructureList);
+            }
         }
 
+        for (int index = 0; index < allTableStructures.size(); index++) {
+            // Generates Kotlin source code from the obtained information.
+            structure2Source(allTableStructures.get(index), argDirectoryTarget);
+        }
     }
 
     /**
@@ -172,25 +177,26 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      * @param argBucketListStructure
      * @throws IOException
      *             If an I/O exception occurs.
+     * @return
      */
-    public void process(final File argMetaXmlSourceFile,
-                        final File argDirectoryTarget,
-                        final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure) throws IOException {
+    public List<BlancoKeyGeneratorKtTableStructure> process(
+            final File argMetaXmlSourceFile,
+            final File argDirectoryTarget,
+            final BlancoKeyGeneratorKtBucketListStructure argBucketListStructure
+    ) throws IOException {
         BlancoKeyGeneratorKtTableXmlParser parser = new BlancoKeyGeneratorKtTableXmlParser();
         parser.setVerbose(this.isVerbose());
         parser.setPackageSuffix(this.fPackageSuffix);
         parser.setOverridePackage(this.fOverridePackage);
-        final BlancoKeyGeneratorKtTableStructure[] structures = parser.parse(argMetaXmlSourceFile, argBucketListStructure);
-        for (int index = 0; index < structures.length; index++) {
-            // Generates Kotlin source code from the obtained information.
-            structure2Source(structures[index], argDirectoryTarget);
-        }
+        return parser.parse(argMetaXmlSourceFile, argBucketListStructure);
     }
+
+
 
     /**
      * Auto-generates source code from a given class information value object.
      *
-     * @param argClassStructure
+     * @param argTableStructure
      *            Class information.
      * @param argDirectoryTarget
      *            Output directory for Kotlin source code.
@@ -198,7 +204,7 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
      *             If an I/O exception occurs.
      */
     public void structure2Source(
-            final BlancoKeyGeneratorKtTableStructure argClassStructure,
+            final BlancoKeyGeneratorKtTableStructure argTableStructure,
             final File argDirectoryTarget) throws IOException {
         /*
          * The output directory will be in the format specified by the targetStyle argument of the ant task.
@@ -222,31 +228,31 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
 
         // Replaces the package name if the Replace option is specified.
         // If Suffix is present, it takes precedence.
-        String myPackage = argClassStructure.getPackage();
-        if (argClassStructure.getPackageSuffix() != null && argClassStructure.getPackageSuffix().length() > 0) {
-            myPackage = myPackage + "." + argClassStructure.getPackageSuffix();
-        } else if (argClassStructure.getOverridePackage() != null && argClassStructure.getOverridePackage().length() > 0) {
-            myPackage = argClassStructure.getOverridePackage();
+        String myPackage = argTableStructure.getPackage();
+        if (argTableStructure.getPackageSuffix() != null && argTableStructure.getPackageSuffix().length() > 0) {
+            myPackage = myPackage + "." + argTableStructure.getPackageSuffix();
+        } else if (argTableStructure.getOverridePackage() != null && argTableStructure.getOverridePackage().length() > 0) {
+            myPackage = argTableStructure.getOverridePackage();
         }
 
         fCgSourceFile = fCgFactory.createSourceFile(myPackage, null);
         fCgSourceFile.setEncoding(fEncoding);
 
         // Creates a class.
-        fCgClass = fCgFactory.createClass(argClassStructure.getName(), "");
+        fCgClass = fCgFactory.createClass(argTableStructure.getName(), "");
         fCgSourceFile.getClassList().add(fCgClass);
 
         // Sets access to the class.
 //        if (isVerbose()) {
-//            System.out.println("/* tueda */ class access = " + argClassStructure.getAccess());
+//            System.out.println("/* tueda */ class access = " + argTableStructure.getAccess());
 //        }
-        String access = argClassStructure.getAccess();
+        String access = argTableStructure.getAccess();
         // In Kotlin, it is public by default.
         if ("public".equals(access)) {
             access = "";
         }
         // Whether it is a data class or not.
-        if (argClassStructure.getData()) {
+        if (argTableStructure.getData()) {
             if (access != null && access.length() > 0) {
                 access += " data";
             } else {
@@ -255,44 +261,44 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         }
         fCgClass.setAccess(access);
         // Whether it is a Final class or not.
-        if (argClassStructure.getData() && !argClassStructure.getFinal()) {
+        if (argTableStructure.getData() && !argTableStructure.getFinal()) {
             if (this.isVerbose()) {
                 System.out.println(fMsg
-                        .getMbkgji09(argClassStructure.getName()));
+                        .getMbkgji09(argTableStructure.getName()));
             }
             fCgClass.setFinal(true);
         } else {
-            fCgClass.setFinal(argClassStructure.getFinal());
+            fCgClass.setFinal(argTableStructure.getFinal());
         }
         // Whether it is an abstract class or not.
         // The data class cannot be an abstract class in Kotlin.
-        if (argClassStructure.getData() && argClassStructure.getAbstract()) {
+        if (argTableStructure.getData() && argTableStructure.getAbstract()) {
             System.err.println("/* tueda */ Abstract has been specified for the data class");
             throw new IllegalArgumentException(fMsg
-                    .getMbkgji07(argClassStructure.getName()));
+                    .getMbkgji07(argTableStructure.getName()));
         }
-        fCgClass.setAbstract(argClassStructure.getAbstract());
+        fCgClass.setAbstract(argTableStructure.getAbstract());
 
         // Supports generic types of classes
-        if (BlancoStringUtil.null2Blank(argClassStructure.getGeneric()).length() > 0) {
+        if (BlancoStringUtil.null2Blank(argTableStructure.getGeneric()).length() > 0) {
             if (isVerbose()) {
-                System.out.println("Class Generics = " + argClassStructure.getGeneric());
+                System.out.println("Class Generics = " + argTableStructure.getGeneric());
             }
-            fCgClass.setGenerics(argClassStructure.getGeneric());
+            fCgClass.setGenerics(argTableStructure.getGeneric());
         }
 
         // Inheritance
-        if (argClassStructure.getExtends() != null && BlancoStringUtil.null2Blank(argClassStructure.getExtends().getType()).length() > 0) {
-            BlancoCgType cgType = fCgFactory.createType(argClassStructure.getExtends().getType());
+        if (argTableStructure.getExtends() != null && BlancoStringUtil.null2Blank(argTableStructure.getExtends().getType()).length() > 0) {
+            BlancoCgType cgType = fCgFactory.createType(argTableStructure.getExtends().getType());
             fCgClass.getExtendClassList().add(cgType);
-            if (BlancoStringUtil.null2Blank(argClassStructure.getExtends().getGenerics()).length() > 0) {
-                cgType.setGenerics(argClassStructure.getExtends().getGenerics());
+            if (BlancoStringUtil.null2Blank(argTableStructure.getExtends().getGenerics()).length() > 0) {
+                cgType.setGenerics(argTableStructure.getExtends().getGenerics());
             }
         }
         // Implementation
-        for (int index = 0; index < argClassStructure.getImplementsList()
+        for (int index = 0; index < argTableStructure.getImplementsList()
                 .size(); index++) {
-            final String impl = (String) argClassStructure.getImplementsList()
+            final String impl = (String) argTableStructure.getImplementsList()
                     .get(index);
             fCgClass.getImplementInterfaceList().add(
                     fCgFactory.createType(impl));
@@ -305,8 +311,8 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         }
 
         // Delegation
-        for (int index = 0; index < argClassStructure.getDelegateList().size(); index++) {
-            final BlancoKeyGeneratorKtDelegateStructure delegateStructure = argClassStructure.getDelegateList().get(index);
+        for (int index = 0; index < argTableStructure.getDelegateList().size(); index++) {
+            final BlancoKeyGeneratorKtDelegateStructure delegateStructure = argTableStructure.getDelegateList().get(index);
             BlancoCgType type = fCgFactory.createType(
                     delegateStructure.getType()
             );
@@ -324,56 +330,56 @@ public class BlancoKeyGeneratorKtXml2KotlinClass {
         }
 
         // Sets the JavaDoc for the class.
-        fCgClass.setDescription(argClassStructure.getDescription());
-        for (String line : argClassStructure.getDescriptionList()) {
+        fCgClass.setDescription(argTableStructure.getDescription());
+        for (String line : argTableStructure.getDescriptionList()) {
             fCgClass.getLangDoc().getDescriptionList().add(line);
         }
 
         /* Sets the annotation for the class. */
-        List annotationList = argClassStructure.getAnnotationList();
+        List annotationList = argTableStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
-            fCgClass.getAnnotationList().addAll(argClassStructure.getAnnotationList());
+            fCgClass.getAnnotationList().addAll(argTableStructure.getAnnotationList());
             /* tueda DEBUG */
-//            System.out.println("/* tueda */ structure2Source : class annotation = " + argClassStructure.getAnnotationList().get(0));
+//            System.out.println("/* tueda */ structure2Source : class annotation = " + argTableStructure.getAnnotationList().get(0));
         }
 
         /* Sets the import for the class. */
-        for (int index = 0; index < argClassStructure.getImportList()
+        for (int index = 0; index < argTableStructure.getImportList()
                 .size(); index++) {
-            final String imported = (String) argClassStructure.getImportList()
+            final String imported = (String) argTableStructure.getImportList()
                     .get(index);
             fCgSourceFile.getImportList().add(imported);
         }
 
-        for (int indexField = 0; indexField < argClassStructure.getFieldList()
+        for (int indexField = 0; indexField < argTableStructure.getFieldList()
                 .size(); indexField++) {
             // Processes each field.
-            final BlancoKeyGeneratorKtFieldStructure fieldStructure = (BlancoKeyGeneratorKtFieldStructure) argClassStructure
+            final BlancoKeyGeneratorKtFieldStructure fieldStructure = (BlancoKeyGeneratorKtFieldStructure) argTableStructure
                     .getFieldList().get(indexField);
 
             // If a required field is not set, exception processing will be performed.
             if (fieldStructure.getName() == null) {
                 throw new IllegalArgumentException(fMsg
-                        .getMbkgji03(argClassStructure.getName()));
+                        .getMbkgji03(argTableStructure.getName()));
             }
             if (fieldStructure.getType() == null) {
                 throw new IllegalArgumentException(fMsg.getMbkgji04(
-                        argClassStructure.getName(), fieldStructure.getName()));
+                        argTableStructure.getName(), fieldStructure.getName()));
             }
 
             // Generates a field.
-            buildField(argClassStructure, fieldStructure);
+            buildField(argTableStructure, fieldStructure);
 
 //            // Generates a setter method.
-//            buildMethodSet(argClassStructure, fieldStructure);
+//            buildMethodSet(argTableStructure, fieldStructure);
 //
 //            // Generates a getter method.
-//            buildMethodGet(argClassStructure, fieldStructure);
+//            buildMethodGet(argTableStructure, fieldStructure);
         }
 
-        if (argClassStructure.getGenerateToString()) {
+        if (argTableStructure.getGenerateToString()) {
             // Generates toString method.
-            buildMethodToString(argClassStructure);
+            buildMethodToString(argTableStructure);
         }
 
         // TODO: Considers whether to externally flag whether to generate copyTo method.
