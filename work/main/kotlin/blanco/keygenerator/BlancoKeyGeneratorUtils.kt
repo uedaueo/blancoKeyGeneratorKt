@@ -46,7 +46,7 @@ class BlancoKeyGeneratorUtils {
          * Convert key into string.
          */
         @JvmStatic
-        fun key2string(encoded: String, keyPhrase: BlancoKeyGeneratorKeyPhrase) {
+        fun key2string(encoded: String, keyPhrase: BlancoKeyGeneratorKeyPhrase): String {
             var decoded: String = ""
             if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.RAW.type) {
                 decoded = encoded;
@@ -60,14 +60,16 @@ class BlancoKeyGeneratorUtils {
             } else {
                 throw BlancoKeyGeneratorException(keyPhrase.type + " is not valid for string type key.")
             }
+            return decoded
         }
 
         /**
          * Convert integer item into key string.
          */
         @JvmStatic
-        fun integer2key(item: Long, keyPhrase: BlancoKeyGeneratorKeyPhrase): String {
+        fun long2key(item: Long, keyPhrase: BlancoKeyGeneratorKeyPhrase): String {
             var result = ""
+            var paddingLeft = false
             if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.RAW.type) {
                 result = item.toString()
             } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.B64.type) {
@@ -76,22 +78,49 @@ class BlancoKeyGeneratorUtils {
                 result = item.toString(16)
             } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.BIN.type) {
                 result = item.toString(2)
+                paddingLeft = true
             } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.SHA1.type || keyPhrase.type == BlancoKeyGeneratorKeyTypes.SHA256.type) {
                 result = hashString(item.toString(), keyPhrase.type, UTF_8)
             } else {
                 throw BlancoKeyGeneratorException(keyPhrase.type + " is not valid for integer type key.")
             }
-            return truncateStringByBytes(result, UTF_8, keyPhrase.length, true)
+            return truncateStringByBytes(result, UTF_8, keyPhrase.length, paddingLeft)
         }
 
+//        @JvmStatic
+//        fun key2long(encoded: String, keyPhrase: BlancoKeyGeneratorKeyPhrase): Long {
+//            var result: Long = 0L
+//            if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.RAW.type) {
+//                result = encoded.toLong()
+//            } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.B64.type) {
+//                result = Base64.getUrlDecoder().decode(encoded)
+//            } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.HEX.type) {
+//                result = item.toString(16)
+//            } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.BIN.type) {
+//                result = item.toString(2)
+//                paddingLeft = true
+//            } else if (keyPhrase.type == BlancoKeyGeneratorKeyTypes.SHA1.type || keyPhrase.type == BlancoKeyGeneratorKeyTypes.SHA256.type) {
+//                result = hashString(item.toString(), keyPhrase.type, UTF_8)
+//            } else {
+//                throw BlancoKeyGeneratorException(keyPhrase.type + " is not valid for integer type key.")
+//            }
+//
+//        }
+
+        /**
+         * Hash a string.
+         */
         @JvmStatic
         fun hashString(target: String, hashType:String, charset: Charset): String {
             val hashByte = MessageDigest.getInstance(hashType).digest(target.toByteArray(charset))
             return printHexBinary(hashByte)
         }
 
+        /**
+         * truncate a string to specified length.
+         */
         @JvmStatic
-        fun truncateStringByBytes(original: String, charset:Charset, limit: Int, leftPadding: Boolean): String {
+        fun truncateStringByBytes(original: String, charset:Charset, limit: Int, leftPaddingZero: Boolean): String {
             val byteBuffer: ByteBuffer = ByteBuffer.allocate(limit)
             val charBuffer: CharBuffer = CharBuffer.wrap(original)
             val encoder: CharsetEncoder = charset.newEncoder()
@@ -101,9 +130,11 @@ class BlancoKeyGeneratorUtils {
             val coderResult: CoderResult = encoder.encode(charBuffer, byteBuffer, true)
             if (!coderResult.isOverflow) {
                 var result = original
-                if (leftPadding) {
-                    val olength = original.length
-                    result = ("%" + limit + "s").format(original)
+                if (leftPaddingZero) {
+                    val padlen = limit - original.length
+                    if (padlen > 0) {
+                        result = getStringsLoop("0", padlen) + result
+                    }
                 }
                 return result
             }
@@ -112,54 +143,88 @@ class BlancoKeyGeneratorUtils {
         }
 
         /**
-         * encode integer as 6 bytes big endian expression base64
+         * encode long as big endian expression of base64
          */
         @JvmStatic
-        fun integer2b64(value: Int, length: Int): String {
-            if (length < 0 || length > 5) {
-                // out of the range of integer.
-                throw BlancoKeyGeneratorException("Length should be between 1 and 5, because of integer is 32 bit digit.")
+        fun long2b64(value: Long, length: Int): String {
+            if (length < 1 || length > 11) {
+                // out of the range of long.
+                throw BlancoKeyGeneratorException("Length should be between 1 and 11, because of integer is 64 bit digit.")
             }
-            val expectedBits = 6 * length
-            val maxValue = 2.toDouble().pow(expectedBits.toDouble()).toInt()
-            if (value >= maxValue) {
+            var expectedBits = 6 * length
+            if (expectedBits > 64) {
+                expectedBits = 64
+            }
+            val maxValue = 2.toDouble().pow((expectedBits - 1).toDouble()).toLong() - 1
+            val minValue = (maxValue * -1) - 1
+//            println("" + maxValue + ", " + minValue)
+            if (value < minValue || value > maxValue) {
                 throw BlancoKeyGeneratorException("%d is exceed the limit of %d length of base64 encoding.".format(value, length))
             }
 
-            /* encode integer as 6 bytes big endian expression */
+            val byteSize = (Math.ceil((expectedBits.toDouble() / 8))).toInt()
+            val arraySize = (Math.ceil(byteSize.toDouble() / 6) * 6).toInt()
+
             val encoded = Base64
                 .getUrlEncoder()
                 .withoutPadding()
-                .encodeToString(ByteArray(6) {
-                    i -> (value.toLong() shr ((5 - i) * 8)).toByte()
+                .encodeToString(ByteArray(arraySize) {
+                        i -> (value ushr ((arraySize - 1 - i) * 8)).toByte()
                 })
-            return encoded.substring(8 - length)
+            /*
+             * to align bit order to right side, byte array needs
+             * some multiples of 24 (lowest common multiple 6 and 8) bits
+             * then 72 bits is 9 bytes for long int,
+             * and 9 byte array produce 12 length base64 string.
+             */
+            val b64Len = arraySize * 8 / 6
+            return encoded.substring(b64Len - length)
         }
 
+        /**
+         * Decode base64 encoded long.
+         */
         @JvmStatic
-        fun b642integer(base64: String): Int {
+        fun b642long(base64: String): Long {
             val length = base64.length
-            if (length < 1 || length > 6) {
-                throw BlancoKeyGeneratorException("Length should be between 1 and 6, because of integer is shown under 6 characters.")
+            if (length < 1 || length > 11) {
+                throw BlancoKeyGeneratorException("Length should be between 1 and 11, because of long is shown under 11 characters.")
             }
+            var expectedBits = 6 * length
+            if (expectedBits > 64) {
+                expectedBits = 64
+            }
+            val leftChar = base64.get(0)
+            var leftPadding = "A"
+            if ((leftChar >= 'g' && leftChar <= 'z') ||
+                (leftChar >= '0' && leftChar <= '9') ||
+                (leftChar == '-') || (leftChar == '_')) {
+                leftPadding = "_"
+            }
+
             var encoded = base64
-            for (i in 0..7 - length) {
-                encoded = "A" + encoded
+            for (i in 0..11 - length) { /* long maximum length is 12 */
+                encoded = leftPadding + encoded
             }
             val bytes = Base64.getUrlDecoder().decode(encoded)
             /* Big Endian */
-            var result: Int = 0
-            for (i in 0..5) {
+            var result: Long = 0
+            for (i in 0..8) { /* it should be 9 bytes array. */
                 val value = bytes.getOrNull(i) ?: 0
                 result = result shl 8
-                result = result or value.toUByte().toInt()
+                result = result or value.toUByte().toLong()
             }
             return result
         }
 
+
+
         @JvmField
         val hexCode: CharArray = "0123456789ABCDEF".toCharArray()
 
+        /**
+         * Print byte array data into hex string.
+         */
         @JvmStatic
         fun printHexBinary(data: ByteArray): String {
             val r: StringBuffer = StringBuffer()
@@ -170,6 +235,9 @@ class BlancoKeyGeneratorUtils {
             return r.toString()
         }
 
+        /**
+         * Parse hex string as byte array.
+         */
         @JvmStatic
         fun parseHexBinary(hexString: String): ByteArray {
             val len = hexString.length
@@ -198,6 +266,9 @@ class BlancoKeyGeneratorUtils {
             return out
         }
 
+        /**
+         * Convert
+         */
         @JvmStatic
         fun hexToBin(ch: Char): Int {
             if ('0' <= ch && ch <= '9') {
@@ -210,6 +281,18 @@ class BlancoKeyGeneratorUtils {
                 return ch - 'a' + 10;
             }
             return -1;
+        }
+
+        /**
+         * Create looped string from string.
+         */
+        @JvmStatic
+        fun getStringsLoop(base: String, count: Int): String {
+            var result = ""
+            for (i in 0 until  count) {
+                result += base
+            }
+            return result
         }
     }
 }

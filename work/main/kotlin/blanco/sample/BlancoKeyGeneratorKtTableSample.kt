@@ -4,7 +4,6 @@ import blanco.keygenerator.BlancoKeyGeneratorConstants
 import blanco.keygenerator.valueobjects.BlancoKeyGeneratorKey
 import blanco.keygenerator.valueobjects.BlancoKeyGeneratorKeyPhrase
 import blanco.keygenerator.BlancoKeyGeneratorUtils
-import blanco.sample.valueobjectkt.simple.SimpleSample
 
 class BlancoKeyGeneratorKtTableSample {
     companion object {
@@ -72,14 +71,14 @@ class BlancoKeyGeneratorKtTableSample {
 
         @JvmStatic
         fun tableHeader(): String {
-            return BlancoKeyGeneratorUtils.integer2b64(tableNumber, tableIdLength)
+            return BlancoKeyGeneratorUtils.long2b64(tableNumber.toLong(), tableIdLength)
         }
 
         @JvmStatic
         fun pinPointIndex(keyItem01: String, keyItem02: Long, valueItem01: String): String {
-            return tableHeader() + BlancoKeyGeneratorUtils.integer2b64(1, keyIdLength) +
+            return tableHeader() + BlancoKeyGeneratorUtils.long2b64(1, keyIdLength) +
                     BlancoKeyGeneratorUtils.string2key(keyItem01, keyList[0].keyPart[0]) + BlancoKeyGeneratorConstants.KEY_SEPARATOR +
-                    BlancoKeyGeneratorUtils.integer2key(keyItem02, keyList[0].keyPart[1]) + BlancoKeyGeneratorConstants.KEY_SEPARATOR +
+                    BlancoKeyGeneratorUtils.long2key(keyItem02, keyList[0].keyPart[1]) + BlancoKeyGeneratorConstants.KEY_SEPARATOR +
                     BlancoKeyGeneratorUtils.string2key(valueItem01, keyList[0].valuePart[0])
         }
 

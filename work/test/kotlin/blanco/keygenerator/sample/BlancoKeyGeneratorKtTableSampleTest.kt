@@ -14,7 +14,6 @@ class BlancoKeyGeneratorKtTableSampleTest {
     @Test
     fun testPinPointIndex() {
         val pinPointIndex = BlancoKeyGeneratorKtTableSample.pinPointIndex("PrimaryKey01", 123456789, "ValueValueValue")
-
         println(pinPointIndex)
     }
 }

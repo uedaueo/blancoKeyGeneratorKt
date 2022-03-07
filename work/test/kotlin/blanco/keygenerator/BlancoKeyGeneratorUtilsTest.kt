@@ -8,11 +8,18 @@ import kotlin.text.Charsets.UTF_8
 class BlancoKeyGeneratorUtilsTest {
 
     @Test
-    fun testInteger2b64() {
-        val encoded = BlancoKeyGeneratorUtils.integer2b64(127, 2)
+    fun testLong2b64() {
+        val encoded = BlancoKeyGeneratorUtils.long2b64(-131072, 3)
+        println("test: " + encoded)
+        val decoded = BlancoKeyGeneratorUtils.b642long(encoded)
+        println("test: " + decoded)
+    }
+
+    @Test
+    fun testLong2Key() {
+        val pharse: BlancoKeyGeneratorKeyPhrase = BlancoKeyGeneratorKtTableSample.keyList[0].keyPart[1]
+        val encoded = BlancoKeyGeneratorUtils.long2key(123456789, pharse)
         println(encoded)
-        val decoded = BlancoKeyGeneratorUtils.b642integer(encoded)
-        println(decoded)
     }
 
     @Test
