@@ -16,6 +16,33 @@ class BlancoKeyGeneratorUtilsTest {
     }
 
     @Test
+    fun testLong2base32() {
+        val base = 32
+        val encoded = BlancoKeyGeneratorUtils.long2baseN(-1, base, 3)
+        println("test: " + encoded + "(" + base + ")")
+        val decoded = BlancoKeyGeneratorUtils.baseN2long(encoded, base)
+        println("test: " + decoded)
+    }
+
+    @Test
+    fun testLong2base16() {
+        val base = 16
+        val encoded = BlancoKeyGeneratorUtils.long2baseN(2047, base, 3)
+        println("test: " + encoded + "(" + base + ")")
+        val decoded = BlancoKeyGeneratorUtils.baseN2long(encoded, base)
+        println("test: " + decoded)
+    }
+
+    @Test
+    fun testLong2base2() {
+        val base = 2
+        val encoded = BlancoKeyGeneratorUtils.long2baseN(-4, base, 3)
+        println("test: " + encoded + "(" + base + ")")
+        val decoded = BlancoKeyGeneratorUtils.baseN2long(encoded, base)
+        println("test: " + decoded)
+    }
+
+    @Test
     fun testLong2Key() {
         val pharse: BlancoKeyGeneratorKeyPhrase = BlancoKeyGeneratorKtTableSample.keyList[0].keyPart[1]
         val encoded = BlancoKeyGeneratorUtils.long2key(123456789, pharse)

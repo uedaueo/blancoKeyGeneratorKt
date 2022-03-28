@@ -15,6 +15,7 @@ import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
 import java.util.Base64
 import kotlin.math.pow
+import kotlin.math.sign
 import kotlin.text.Charsets.UTF_8
 
 /**
@@ -217,10 +218,121 @@ class BlancoKeyGeneratorUtils {
             return result
         }
 
-
-
         @JvmField
-        val hexCode: CharArray = "0123456789ABCDEF".toCharArray()
+        val hexCode: CharArray = "0123456789ABCDEFGHIJKLMNOPQRSTUV".toCharArray()
+
+        /**
+         * Encode long to baseN expression.
+         */
+        @JvmStatic
+        fun long2baseN(value: Long, base: Int, length: Int): String {
+            var bitSize = 1
+            var mask: Long = -1
+            if (base == 2) {
+                bitSize = 1
+                mask = 1
+            } else if (base == 4) {
+                bitSize = 2
+                mask = 3
+            } else if (base == 8) {
+                bitSize = 3
+                mask = 7
+            } else if (base == 16) {
+                bitSize = 4
+                mask = 15
+            } else if (base == 32) {
+                bitSize = 5
+                mask = 31
+            } else if (base == 64) {
+                return long2b64(value, length)
+            } else {
+                throw BlancoKeyGeneratorException("Base should be power of 2.")
+            }
+            val maxLength = Math.ceil(64.toDouble() / bitSize)
+            var expectedBits = bitSize * length
+            if (expectedBits > 64) {
+                expectedBits = 64
+            }
+            if (expectedBits < 2 || length > maxLength) {
+                throw BlancoKeyGeneratorException("Length should be between 1 and " + maxLength + " because of long is shown under " + maxLength + " characters in base " + base + " .")
+            }
+            val maxValue = 2.toDouble().pow((expectedBits - 1).toDouble()).toLong() - 1
+            val minValue = (maxValue * -1) - 1
+            if (value < minValue || value > maxValue) {
+                throw BlancoKeyGeneratorException("%d is exceed the limit of %d length of base %d encoding.".format(value, length, base))
+            }
+
+            var strN = ""
+            var tmpLong = value
+            for (i in 0 until length) {
+                val cvalue = tmpLong and mask
+                val char = hexCode[cvalue.toInt()]
+                strN = char + strN
+                tmpLong = tmpLong shr bitSize
+            }
+            return strN
+        }
+
+        @JvmStatic
+        fun baseN2long(encoded: String, base: Int): Long {
+            val length = encoded.length
+
+            var bitSize = 0
+            var signPadding = '1'
+            var signMask = 1
+            if (base == 2) {
+                bitSize = 1
+            } else if (base == 4) {
+                bitSize = 2
+                signPadding = '3'
+                signMask = 2
+            } else if (base == 8) {
+                bitSize = 3
+                signPadding = '7'
+                signMask = 4
+            } else if (base == 16) {
+                bitSize = 4
+                signPadding = 'F'
+                signMask = 8
+            } else if (base == 32) {
+                bitSize = 5
+                signPadding = 'V'
+                signMask = 16
+            } else if (base == 64) {
+                return b642long(encoded)
+            } else {
+                throw BlancoKeyGeneratorException("Base should be power of 2.")
+            }
+
+            val maxLength: Int = Math.ceil(64.toDouble() / bitSize).toInt()
+            var expectedBits = bitSize * length
+            if (expectedBits > 64) {
+                expectedBits = 64
+            }
+            if (expectedBits < 2 || length > maxLength) {
+                throw BlancoKeyGeneratorException("Length should be between 1 and " + maxLength + " because of long is shown under " + maxLength + " characters in base " + base + " .")
+            }
+
+            var tmpEncoded = encoded.toUpperCase()
+            if ((hexCode.binarySearch(tmpEncoded[0]) and signMask) == 0) {
+                signPadding = '0'
+            }
+
+            var tmpLength = maxLength - length
+            for (i in 0 until tmpLength) {
+                tmpEncoded = signPadding + tmpEncoded
+            }
+            println(tmpEncoded)
+            tmpLength = tmpEncoded.length
+
+            var value: Long = 0
+            tmpEncoded.forEach {
+                val shiftBit = bitSize * --tmpLength
+                value += hexCode.binarySearch(it).toLong() shl shiftBit
+            }
+            return value
+        }
+
 
         /**
          * Print byte array data into hex string.
